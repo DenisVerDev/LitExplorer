@@ -10,7 +10,7 @@ namespace LitExplorer.Services
             base(httpClientFactory, configuration) 
         { }
 
-        public async Task<BrowseBookResponse> BrowseBooksAsync(BrowseFilterDTO filter)
+        public async Task<BrowseBookResponse?> BrowseBooksAsync(BrowseFilterDTO filter)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace LitExplorer.Services
 
     public class BrowseBookResponse
     {
-        public List<BookDTO> Books { get; set; } = null!;
-        public List<AuthorDTO> Authors { get; set; } = null!;
+        public List<BookDTO>? Books { get; set; } = null;
+        public List<AuthorDTO>? Authors { get; set; } = null;
     }
 }
