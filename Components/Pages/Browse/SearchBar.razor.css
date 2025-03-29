@@ -1,0 +1,33 @@
+﻿.searchbar-container{
+    padding: 0.5rem;
+    height:33px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchbar-container:hover,
+.searchbar-container:focus-within{
+    border-color: #70b3e2;
+}
+
+.search-icon{
+    margin-right: 0.5rem;
+    color: #888;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.searchbar-input{
+    width:100%;
+    border:none;
+    box-shadow:none;
+    outline:none;
+    font-size: 0.9rem;
+}
+
+.searchbar-input::placeholder{
+    color: #aaa;
+}
