@@ -3,3 +3,13 @@
     margin: 0 auto;
     padding: 20px;
 }
+
+.book-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0rem;
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    background-color: var(--card-bg);
+    padding-bottom: 15px;
+}

@@ -1,0 +1,96 @@
+﻿<div class="book-row">
+	<img class="book-cover" src="@(SelectedBookSource.BookMeta.CoverImageUrl ?? "/images/default-cover.png")" alt="@Book.Title" />
+	<div class="book-info">
+		<div class="book-title">
+			@Book.Title
+		</div>
+		<div>
+			@foreach (var source in Sources)
+			{
+				if(source.Icon != null)
+				{
+					<span>
+						<img src="data:image/png;base64,@(Convert.ToBase64String(source.Icon))" alt="@source.SourceName" />
+					</span>
+				}
+			}
+		</div>
+		@foreach (var bookSource in Book.BookSources)
+		{
+			@if(SelectedBookSource.BookSourceId == bookSource.BookSourceId)
+			{
+				{
+					SelectedAuthor = Authors.Where(a => a.AuthorId == bookSource.BookMeta.AuthorId).First();
+					SelectedSource = Sources.Where(s => s.SourceId == bookSource.SourceId).First();
+				}
+				<div>by @SelectedAuthor.AuthorName</div>
+				<div class="book-meta">
+					<div>
+						<span>Rating: @bookSource.BookMeta.AverageRating</span>
+						<span class="ms-lg-1">Ratings: @bookSource.BookMeta.RatingsCount</span>
+						<span class="ms-lg-1">Views: @bookSource.BookMeta.TotalViewsCount</span>
+						<span class="ms-lg-1">Readers: @bookSource.BookMeta.ReadersCount</span>
+						<span class="ms-lg-1">Chapters: @bookSource.BookMeta.ChaptersCount</span>
+					</div>
+					<div>
+						<span>First chapter: @bookSource.BookMeta.FirstChapterReleaseDate!.Value.ToShortDateString()</span>
+						<span class="ms-lg-1">Last chapter: @bookSource.BookMeta.LastChapterReleaseDate!.Value.ToShortDateString()</span>
+					</div>
+				</div>
+				<div class="book-tags">
+					@foreach(var tagCategory in TagsCategories)
+					{
+						SelectedTags = bookSource.Tags.Where(t=>t.CategoryId == tagCategory.CategoryId).ToList();
+						bool special = (tagCategory.CategoryId == 6 || tagCategory.CategoryId == 7);
+
+						foreach(var tag in SelectedTags)
+						{
+							<span class="tag-badge @(special ? "special-tag" : "")">@tag.TagName</span>
+						}
+					}
+				</div>
+				<div class="description-container">
+					@{
+						string descState = ShowFullDescription ? "book-description-full" : "book-description-clamped";
+					}
+					<div class="@descState">
+						@((MarkupString)bookSource.BookMeta.Description!)
+					</div>
+					<button class="read-more" @onclick="ToggleDescription">
+						@(ShowFullDescription ? "Show Less" : "Read More")
+					</button>
+				</div>
+			}
+		}
+	</div>
+</div>
+
+@code{
+	[Parameter]
+	public BookDTO Book { get; set; } = null!; // we assume that all nested elements are filled and Book is not null
+
+	[Parameter]
+	public List<AuthorDTO> Authors { get; set; } = null!; // we assume that Authors are not null
+
+	[Parameter]
+	public List<SourceDTO> Sources { get; set; } = null!; // we assume that Sources are not null
+
+	[Parameter]
+	public List<TagsCategoryDTO> TagsCategories { get; set; } = null!; // we assume that TagsCategories are not null
+
+	private BookSourceDTO SelectedBookSource { get; set; } = null!;
+	private AuthorDTO SelectedAuthor { get; set; } = null!;
+	private SourceDTO SelectedSource { get; set; } = null!;
+
+	private List<TagDTO> SelectedTags { get; set; } = null!;
+
+	private bool ShowFullDescription { get; set; } = false;
+
+	protected override void OnInitialized()
+	{
+		SelectedBookSource = Book.BookSources.First();
+	}
+
+	private void ToggleDescription()
+		=> ShowFullDescription = !ShowFullDescription;
+}
