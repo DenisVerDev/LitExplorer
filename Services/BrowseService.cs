@@ -10,14 +10,14 @@ namespace LitExplorer.Services
             base(httpClientFactory, configuration) 
         { }
 
-        public async Task<BrowseBookResponse?> BrowseBooksAsync(BrowseFilterDTO filter)
+        public async Task<BrowseBookResponse?> BrowseBooksAsync(BrowseFilterDTO filter, int page, int count)
         {
             try
             {
                 if (filter == null)
                     throw new Exception("Received filter was null!");
 
-                string browseUrl = ApiUrl+"Browse";
+                string browseUrl = $"{ApiUrl}Browse?page={page}&count={count}";
                 var jsonContent = new StringContent(JsonSerializer.Serialize(filter), Encoding.UTF8, "application/json");
 
                 var response = await HttpClient.PostAsync(browseUrl, jsonContent);
