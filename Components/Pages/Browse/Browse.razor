@@ -34,6 +34,12 @@
 		</div>
 		<div class="col-4">
 			@* Filter panel will be here *@
+			@if(TagsCategories != null && TagsCategories.Count > 0)
+			{
+				<FilterPanel Filter="Filter"
+							 Sources="Sources"
+							 TagsCategories="TagsCategories" />
+			}
 		</div>
 	</div>
 	<div class="row w-100">
