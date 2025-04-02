@@ -6,47 +6,39 @@
 <PageTitle>Browse literature</PageTitle>
 
 <div class="container browse-container">
-	<div class="row w-100">
-		<div class="col-8">
-			<SearchBar/>
-		</div>
-		<div class="col-4"></div>
-	</div>
-	<div class="row w-100">
-		<div class="col-8">
-			@* List of books will be here *@
-			<div class="book-list">
-				@if((Books != null && Books.Count > 0) && (Authors != null && Authors.Count > 0))
+	<div class="row w-100 m-0">
+		<div class="col-12 col-md-9 order-2 order-md-1">
+			<div class="row w-100 m-0">
+				@* here would be browse title and sort by inputs *@
+			</div>
+			<div class="row w-100 m-0">
+				<SearchBar />
+			</div>
+			<div class="row w-100 m-0">
+				@if ((Books != null && Books.Count > 0) && (Authors != null && Authors.Count > 0))
 				{
-					foreach(var book in Books)
+					foreach (var book in Books)
 					{
-						<BookRow Book="book" 
-						Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
-						TagsCategories="TagsCategories"
-						Sources="Sources"/>
+						<BookRow Book="book"
+								 Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
+								 TagsCategories="TagsCategories"
+								 Sources="Sources" />
 					}
 				}
 				else
 				{
-					@* show some text here *@
+
 				}
 			</div>
 		</div>
-		<div class="col-4">
-			@* Filter panel will be here *@
-			@if(TagsCategories != null && TagsCategories.Count > 0)
+		<div class="col-12 col-md-3 order-1 order-md-2 mb-3">
+			@if (TagsCategories != null && TagsCategories.Count > 0)
 			{
 				<FilterPanel Filter="Filter"
 							 Sources="Sources"
 							 TagsCategories="TagsCategories" />
 			}
 		</div>
-	</div>
-	<div class="row w-100">
-		<div class="col-8">
-			@* Pagination component will be here *@
-		</div>
-		<div class="col-4"></div>
 	</div>
 </div>
 
