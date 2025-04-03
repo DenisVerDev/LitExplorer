@@ -10,21 +10,21 @@ namespace LitExplorer.Services
             base(httpClientFactory, configuration) 
         { }
 
-        public async Task<List<BookDTO>?> BrowseBooksAsync(BrowseFilterDTO filter)
+        public async Task<BrowseBookResponse?> BrowseBooksAsync(BrowseFilterDTO filter, int page, int count)
         {
             try
             {
                 if (filter == null)
                     throw new Exception("Received filter was null!");
 
-                string browseUrl = ApiUrl+"Browse";
+                string browseUrl = $"{ApiUrl}Browse?page={page}&count={count}";
                 var jsonContent = new StringContent(JsonSerializer.Serialize(filter), Encoding.UTF8, "application/json");
 
                 var response = await HttpClient.PostAsync(browseUrl, jsonContent);
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<List<BookDTO>>
+                    return JsonSerializer.Deserialize<BrowseBookResponse>
                         (
                             jsonResponse,
                             new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
@@ -37,5 +37,11 @@ namespace LitExplorer.Services
                 return null;
             }
         }
+    }
+
+    public class BrowseBookResponse
+    {
+        public List<BookDTO>? Books { get; set; } = null;
+        public List<AuthorDTO>? Authors { get; set; } = null;
     }
 }
