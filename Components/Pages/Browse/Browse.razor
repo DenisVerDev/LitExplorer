@@ -1,0 +1,67 @@
+﻿@page "/Browse"
+@rendermode InteractiveServer
+@inject BrowseService BrowseService
+@inject MetadataService MetadataService
+
+<PageTitle>Browse literature</PageTitle>
+
+<div class="container browse-container">
+	<div class="row w-100 m-0">
+		<div class="col-12 col-md-9 order-2 order-md-1">
+			<div class="row w-100 m-0">
+				@* here would be browse title and sort by inputs *@
+			</div>
+			<div class="row w-100 m-0">
+				<SearchBar />
+			</div>
+			<div class="row w-100 m-0">
+				@if ((Books != null && Books.Count > 0) && (Authors != null && Authors.Count > 0))
+				{
+					foreach (var book in Books)
+					{
+						<BookRow Book="book"
+								 Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
+								 TagsCategories="TagsCategories"
+								 Sources="Sources" />
+					}
+				}
+				else
+				{
+
+				}
+			</div>
+		</div>
+		<div class="col-12 col-md-3 order-1 order-md-2 mb-3">
+			@if (TagsCategories != null && TagsCategories.Count > 0)
+			{
+				<FilterPanel Filter="Filter"
+							 Sources="Sources"
+							 TagsCategories="TagsCategories" />
+			}
+		</div>
+	</div>
+</div>
+
+@code{
+	private const int maxBooks = 12;
+
+	private BrowseFilterDTO Filter { get; set; } = new BrowseFilterDTO();
+	private int Page { get; set; } = 0;
+
+	private List<BookDTO>? Books { get; set; } = null;
+	private List<AuthorDTO>? Authors { get; set; } = null;
+	private List<TagsCategoryDTO>? TagsCategories { get; set; } = null;
+	private List<SourceDTO>? Sources { get; set; } = null;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var browseResponse = await BrowseService.BrowseBooksAsync(Filter, Page, maxBooks);
+		Books = browseResponse?.Books;
+		Authors = browseResponse?.Authors;
+
+		var tagsCategoriesResponse = await MetadataService.GetTagsCategoriesAsync(true);
+		TagsCategories = tagsCategoriesResponse?.OrderByDescending(tc => tc.CategoryId).ToList();
+
+		Sources = await MetadataService.GetSourcesAsync();
+	}
+}

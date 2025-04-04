@@ -1,0 +1,156 @@
+﻿<div class="filter-panel">
+	@* 	1st part - 5 categories
+	2nd part - rating, chapters, year
+	3rd part - sources
+	4th part - type and status
+	5th part - reset and apply buttons *@
+	<div class="filter-section"> @* 1st section *@
+		@foreach (var tagCategory in SortedTagsCategories)
+		{
+			<div class="tag-category filter-padding">
+				@tagCategory.CategoryName tags
+			</div>
+		}
+	</div>
+	<div class="filter-section filter-padding"> @* 2nd section *@
+		<div class="range-row">
+			<label>Average Rating</label>
+			<div class="range-inputs">
+				<input type="text" placeholder="min" />
+				<div class="divider"></div>
+				<input type="text" placeholder="max" />
+			</div>
+		</div>
+
+		<div class="range-row">
+			<label>Chapters Number</label>
+			<div class="range-inputs">
+				<input type="text" placeholder="min" />
+				<div class="divider"></div>
+				<input type="text" placeholder="max" />
+			</div>
+		</div>
+
+		<div class="range-row">
+			<label>Release Year</label>
+			<div class="range-inputs">
+				<input type="text" placeholder="min" />
+				<div class="divider"></div>
+				<input type="text" placeholder="max" />
+			</div>
+		</div>
+	</div>
+	<div class="filter-section filter-padding sources-section"> @* 3rd section *@
+		<label class="sources-title">Sources</label>
+		@foreach (var source in Sources)
+		{
+			<div class="source-item">
+				<!-- The hidden native checkbox -->
+				<input type="checkbox" id="source_@(source.SourceId)" class="source-checkbox" />
+
+				<!-- The custom checkbox + label text -->
+				<label for="source_@(source.SourceId)" class="custom-check-label">
+					<span class="checkmark"></span>
+					<span class="source-name">@source.SourceName</span>
+				</label>
+			</div>
+		}
+	</div>
+	<div class="filter-section filter-padding type-section">
+		@* Type title, checkboxes with stuff *@
+		<label class="sources-title">Type</label>
+		<div class="type-row">
+			<!-- Left column (Original) -->
+			<div class="source-item">
+				<input type="checkbox" id="type-original" class="source-checkbox" />
+				<label for="type-original" class="custom-check-label">
+					<span class="checkmark"></span>
+					<span class="source-name">Original</span>
+				</label>
+			</div>
+
+			<!-- Right column (Fanfic) -->
+			<div class="source-item">
+				<input type="checkbox" id="type-fanfic" class="source-checkbox" />
+				<label for="type-fanfic" class="custom-check-label">
+					<span class="checkmark"></span>
+					<span class="source-name">Fanfic</span>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="filter-section filter-padding status-section">
+		@* Status title, checkboxes with stuff *@
+		<label class="sources-title">Status</label>
+		<div class="status-row">
+			<!-- Left column: 3 checkboxes -->
+			<div class="status-col">
+				<div class="source-item">
+					<input type="checkbox" id="status-ongoing" class="source-checkbox" />
+					<label for="status-ongoing" class="custom-check-label">
+						<span class="checkmark"></span>
+						<span class="source-name">Ongoing</span>
+					</label>
+				</div>
+				<div class="source-item">
+					<input type="checkbox" id="status-completed" class="source-checkbox" />
+					<label for="status-completed" class="custom-check-label">
+						<span class="checkmark"></span>
+						<span class="source-name">Completed</span>
+					</label>
+				</div>
+				<div class="source-item">
+					<input type="checkbox" id="status-stubbed" class="source-checkbox" />
+					<label for="status-stubbed" class="custom-check-label">
+						<span class="checkmark"></span>
+						<span class="source-name">Stubbed</span>
+					</label>
+				</div>
+			</div>
+
+			<!-- Right column: 2 checkboxes -->
+			<div class="status-col">
+				<div class="source-item">
+					<input type="checkbox" id="status-dropped" class="source-checkbox" />
+					<label for="status-dropped" class="custom-check-label">
+						<span class="checkmark"></span>
+						<span class="source-name">Dropped</span>
+					</label>
+				</div>
+				<div class="source-item">
+					<input type="checkbox" id="status-hiatus" class="source-checkbox" />
+					<label for="status-hiatus" class="custom-check-label">
+						<span class="checkmark"></span>
+						<span class="source-name">Hiatus</span>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Last Section: Reset and Apply Buttons -->
+	<div class="filter-section filter-padding button-section">
+		<div class="range-inputs">
+			<button class="btn-reset">Reset</button>
+			<button class="btn-apply">Apply</button>
+		</div>
+	</div>
+</div>
+
+@code{
+
+	[Parameter]
+	public BrowseFilterDTO Filter { get; set; } = null!;
+
+	[Parameter]
+	public List<SourceDTO> Sources { get; set; } = null!;
+
+	[Parameter]
+	public List<TagsCategoryDTO> TagsCategories { get; set; } = null!;
+
+	private List<TagsCategoryDTO> SortedTagsCategories { get; set; } = null!;
+
+	protected override void OnInitialized()
+	{
+		SortedTagsCategories = TagsCategories!.OrderBy(tc => tc.CategoryId).Take(5).ToList();
+	}
+}
