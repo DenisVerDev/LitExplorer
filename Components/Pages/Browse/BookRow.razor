@@ -29,14 +29,14 @@
 				<div class="mt-1 d-flex flex-wrap">
 					@foreach(var tag in VisibleTags)
 					{
-						bool special = (tag.CategoryId == 6 || tag.CategoryId == 7);
-						<span class="tag-badge @(special ? "special-tag" : "") me-1 mb-1">@tag.TagName</span>
+						bool primary = (tag.CategoryId == 6 || tag.CategoryId == 7);
+						<span class="litexp-badge @(primary ? "litexp-badge-p" : "") me-1 mb-1">@tag.TagName</span>
 					}
 					@if (SelectedBookSource.Tags.Count() > 7)
 					{
-						<button class="more-tags-button" @onclick="()=>ToggleTags()">
+						<span class="litexp-badge litexp-badge-p litexp-badge-pi btn-tags-toggle me-1 mb-1" @onclick="()=>ToggleTags()">
 							@(ShowAllTags ? "-" : "+")
-						</button>
+						</span>
 					}
 				</div>
 				<div class="position-relative overflow-hidden">
@@ -47,7 +47,7 @@
 						@((MarkupString)bookSource.BookMeta.Description!)
 					</div>
 					<button class="read-more" @onclick="ToggleDescription">
-						@(ShowFullDescription ? "Show Less" : "Read More")
+						@(ShowFullDescription ? "<<<less" : "more>>>")
 					</button>
 				</div>
 			}

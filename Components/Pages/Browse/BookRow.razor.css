@@ -8,31 +8,9 @@
     background-color: lightgray;
 }
 
-.tag-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    font-size: 0.75rem;
-    border-radius: 0.2rem;
-    background-color: lightgray;
-}
-
-.special-tag {
-    background-color: #228be6;
-    color: #fff;
-}
-
-.more-tags-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 10px;
-    font-size: 0.75rem;
-    border-radius: 0.2rem;
-    background-color: #70b3e2;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    line-height: 1;
+.btn-tags-toggle{
+    width: 30px;
+    height: auto;
 }
 
 .book-description-full,
@@ -52,7 +30,7 @@
 .read-more {
     background: none;
     border: none;
-    color: #0d6efd;
+    color: var(--primary-color);
     font-size: 0.9rem;
     cursor: pointer;
     padding: 0;
@@ -60,5 +38,5 @@
 }
 
 .read-more:hover{
-    color: #dc3545;
+    color: var(--secondary-color);
 }

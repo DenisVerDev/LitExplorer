@@ -49,10 +49,10 @@
 		{
 			<div class="d-flex align-items-center mb-1">
 				<!-- The hidden native checkbox -->
-				<input type="checkbox" id="source_@(source.SourceId)" class="source-checkbox" />
+				<input type="checkbox" id="source_@(source.SourceId)" class="litexp-checkbox" />
 
 				<!-- The custom checkbox + label text -->
-				<label for="source_@(source.SourceId)" class="custom-check-label">
+				<label for="source_@(source.SourceId)" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
 					<span class="text-dark">@source.SourceName</span>
 				</label>
@@ -64,8 +64,8 @@
 		<div class="d-flex gap-3">
 			<!-- Left column (Original) -->
 			<div class="flex-fill d-flex align-items-center mb-1">
-				<input type="checkbox" id="type-original" class="source-checkbox" />
-				<label for="type-original" class="custom-check-label">
+				<input type="checkbox" id="type-original" class="litexp-checkbox" />
+				<label for="type-original" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
 					<span class="text-dark">Original</span>
 				</label>
@@ -73,8 +73,8 @@
 
 			<!-- Right column (Fanfic) -->
 			<div class="flex-fill d-flex align-items-center mb-1">
-				<input type="checkbox" id="type-fanfic" class="source-checkbox" />
-				<label for="type-fanfic" class="custom-check-label">
+				<input type="checkbox" id="type-fanfic" class="litexp-checkbox" />
+				<label for="type-fanfic" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
 					<span class="text-dark">Fanfic</span>
 				</label>
@@ -87,22 +87,22 @@
 			<!-- Left column: 3 checkboxes -->
 			<div class="flex-fill d-flex flex-column">
 				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-ongoing" class="source-checkbox" />
-					<label for="status-ongoing" class="custom-check-label">
+					<input type="checkbox" id="status-ongoing" class="litexp-checkbox" />
+					<label for="status-ongoing" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
 						<span class="text-dark">Ongoing</span>
 					</label>
 				</div>
 				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-completed" class="source-checkbox" />
-					<label for="status-completed" class="custom-check-label">
+					<input type="checkbox" id="status-completed" class="litexp-checkbox" />
+					<label for="status-completed" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
 						<span class="text-dark">Completed</span>
 					</label>
 				</div>
 				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-stubbed" class="source-checkbox" />
-					<label for="status-stubbed" class="custom-check-label">
+					<input type="checkbox" id="status-stubbed" class="litexp-checkbox" />
+					<label for="status-stubbed" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
 						<span class="text-dark">Stubbed</span>
 					</label>
@@ -112,15 +112,15 @@
 			<!-- Right column: 2 checkboxes -->
 			<div class="flex-fill d-flex flex-column">
 				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-dropped" class="source-checkbox" />
-					<label for="status-dropped" class="custom-check-label">
+					<input type="checkbox" id="status-dropped" class="litexp-checkbox" />
+					<label for="status-dropped" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
 						<span class="text-dark">Dropped</span>
 					</label>
 				</div>
 				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-hiatus" class="source-checkbox" />
-					<label for="status-hiatus" class="custom-check-label">
+					<input type="checkbox" id="status-hiatus" class="litexp-checkbox" />
+					<label for="status-hiatus" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
 						<span class="text-dark">Hiatus</span>
 					</label>
@@ -130,8 +130,8 @@
 	</div>
 	<div class="p-1 ps-2 pe-2 mt-1"> @* 6th part *@
 		<div class="d-flex align-items-center justify-content-between">
-			<button class="btn-reset">Reset</button>
-			<button class="btn-apply">Apply</button>
+			<button class="litexp-btn litexp-btn-ps btn-fp">Reset</button>
+			<button class="litexp-btn litexp-btn-p btn-fp">Apply</button>
 		</div>
 	</div>
 </div>
