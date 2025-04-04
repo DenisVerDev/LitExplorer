@@ -1,19 +1,10 @@
-﻿<div class="book-row">
-	<img class="book-cover" src="@(SelectedBookSource.BookMeta.CoverImageUrl ?? "/images/default-cover.png")" alt="@Book.Title" />
-	<div class="book-info">
+﻿<div class="row w-100 book-row">
+	<div class="col-12 col-md-2 mb-2">
+		<img class="w-100" src="@(SelectedBookSource.BookMeta.CoverImageUrl ?? "/images/default-cover.png")" alt="@Book.Title" />
+	</div>
+	<div class="col-12 col-md-10 book-info">
 		<div class="book-title">
 			@Book.Title
-		</div>
-		<div>
-			@foreach (var source in Sources)
-			{
-				if(source.Icon != null)
-				{
-					<span>
-						<img src="data:image/png;base64,@(Convert.ToBase64String(source.Icon))" alt="@source.SourceName" />
-					</span>
-				}
-			}
 		</div>
 		@foreach (var bookSource in Book.BookSources)
 		{
@@ -38,15 +29,16 @@
 					</div>
 				</div>
 				<div class="book-tags">
-					@foreach(var tagCategory in TagsCategories)
+					@foreach(var tag in VisibleTags)
 					{
-						SelectedTags = bookSource.Tags.Where(t=>t.CategoryId == tagCategory.CategoryId).ToList();
-						bool special = (tagCategory.CategoryId == 6 || tagCategory.CategoryId == 7);
-
-						foreach(var tag in SelectedTags)
-						{
-							<span class="tag-badge @(special ? "special-tag" : "")">@tag.TagName</span>
-						}
+						bool special = (tag.CategoryId == 6 || tag.CategoryId == 7);
+						<span class="tag-badge @(special ? "special-tag" : "")">@tag.TagName</span>
+					}
+					@if (SelectedBookSource.Tags.Count() > 7)
+					{
+						<button class="more-tags-button" @onclick="()=>ToggleTags()">
+							@(ShowAllTags ? "-" : "+")
+						</button>
 					}
 				</div>
 				<div class="description-container">
@@ -76,21 +68,40 @@
 	public List<SourceDTO> Sources { get; set; } = null!; // we assume that Sources are not null
 
 	[Parameter]
-	public List<TagsCategoryDTO> TagsCategories { get; set; } = null!; // we assume that TagsCategories are not null
+	public List<TagsCategoryDTO> TagsCategories { get; set; } = null!; // we assume that TagsCategories are not null and is not sorted
 
 	private BookSourceDTO SelectedBookSource { get; set; } = null!;
 	private AuthorDTO SelectedAuthor { get; set; } = null!;
 	private SourceDTO SelectedSource { get; set; } = null!;
 
-	private List<TagDTO> SelectedTags { get; set; } = null!;
+	private List<TagDTO> VisibleTags { get; set; } = null!;
 
 	private bool ShowFullDescription { get; set; } = false;
+	private bool ShowAllTags { get; set; } = false;
+
+	private const int visibleTagsNumber = 7;
 
 	protected override void OnInitialized()
 	{
 		SelectedBookSource = Book.BookSources.First();
+		ToggleTags(false);
 	}
 
 	private void ToggleDescription()
 		=> ShowFullDescription = !ShowFullDescription;
+
+	private void ToggleTags(bool? toggle = null)
+	{
+		if (toggle.HasValue)
+			ShowAllTags = toggle.Value;
+		else
+			ShowAllTags = !ShowAllTags;
+
+		var query = SelectedBookSource.Tags.OrderByDescending(t => t.CategoryId).AsQueryable();
+
+		if(ShowAllTags)
+			VisibleTags = query.ToList();
+		else
+			VisibleTags = query.Take(visibleTagsNumber).ToList();
+	}
 }
