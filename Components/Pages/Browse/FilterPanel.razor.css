@@ -1,23 +1,4 @@
-﻿.filter-panel {
-    /*background-color: #fff;*/
-/*    border: 1px solid #ddd;*/
-    /*border-radius: 4px;*/
-}
-
-.filter-section {
-    margin-top: 0.25rem;
-    margin-bottom: 1rem;
-}
-
-.filter-padding{
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 16px;
-    padding-right: 16px;
-}
-
-/*---1st section---*/
-.tag-category {
+﻿.tag-category {
     display: block;
     width: 100%;
     font-weight: 600;
@@ -31,26 +12,9 @@
     border-color: #dee2e6;
 }
 
-/*---2nd section---*/
-.range-row {
-    margin-bottom: 1rem;
-}
-
-.range-row label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.range-inputs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.range-inputs input[type="text"] {
-    width: 40%;
+.range-input {
+    width: 50%;
+    height: 25%;
     padding: 0.4rem;
     font-size: 0.9rem;
     border: 1px solid #ccc;
@@ -59,41 +23,20 @@
     transition: border-color 0.2s ease;
 }
 
-.range-inputs input[type="text"]:hover {
+.range-input:hover {
     border-color: #70b3e2;
 }
 
-.range-inputs input[type="text"]:focus {
+.range-input:focus {
     border-color: #70b3e2;
     outline:none;
 }
 
 .divider {
-    display: inline-block;
     width: 30px;
     height: 2px;
     background-color: #ccc;
     margin: 0 4px;
-}
-
-/* --- 3rd Section: Sources --- */
-.sources-section {
-    margin-top: -1rem;
-    margin-bottom: 1rem;
-}
-
-.sources-title {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #333;
-    font-size: 1rem;
-}
-
-.source-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.75rem;
 }
 
 .source-checkbox {
@@ -146,80 +89,32 @@
     opacity: 1;
 }
 
-.source-name {
-    font-weight: 400;
-    color: #333;
-}
-
-/* 4th Section: Type */
-/* --- Type Section: Two columns in one row --- */
-.type-row {
-    display: flex;
-    gap: 1rem; /* Horizontal space between "Original" and "Fanfic" */
-}
-
-.type-row .source-item {
-    flex: 1;  /* Each checkbox takes half the row */
-}
-
-/* --- Status Section: Two columns side by side --- */
-.status-row {
-    display: flex;
-    gap: 1rem; /* Horizontal space between the two status columns */
-}
-
-/* Each column in the Status row */
-.status-col {
-    flex: 1; /* Each column takes half the available width */
-    display: flex;
-    flex-direction: column;
-}
-
-/* --- Last Section: Reset and Apply Buttons --- */
-.button-section {
-    margin-top: 1rem;
-    /* No divider or extra top border */
-}
-
-/* 
-   Reusing .range-inputs for consistent side-by-side layout
-   that matches the min/max fields above
-*/
-.button-section .range-inputs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-/* Both buttons match the style (width/height) of your range inputs */
 .btn-reset,
 .btn-apply {
-    width: 40%;               /* same width as .range-inputs input[type="text"] */
-    padding: 0.3rem;          /* slightly less tall than 0.4rem for a slimmer look */
-    font-size: 0.9rem;        /* matches your input font-size */
-    border-radius: 4px;       /* same rounding as inputs */
+    width: 48%;             
+    padding: 0.3rem;  
+    font-size: 0.9rem;   
+    border-radius: 4px; 
     text-align: center;       
-    border: 1px solid #ccc;   /* mimic the input border */
+    border: 1px solid #ccc;
     cursor: pointer;
     transition: background-color 0.2s ease;
 }
 
-/* Reset button: white -> light gray on hover */
 .btn-reset {
     background-color: #fff;
     color: #333;
 }
 
 .btn-reset:hover {
-    background-color: #f2f2f2; /* a lighter gray hover */
+    background-color: #f2f2f2;
 }
 
-/* Apply button: more intense blue -> lighter blue on hover */
 .btn-apply {
-    background-color: #228be6; /* deeper blue than before */
+    background-color: #228be6;
     color: #fff;
 }
 
 .btn-apply:hover {
-    background-color: #3399ff; /* lighter blue on hover */
+    background-color: #3399ff;
 }

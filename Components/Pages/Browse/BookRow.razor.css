@@ -1,12 +1,4 @@
-﻿.book-row {
-    display: flex;
-    align-items: flex-start;
-    padding: 15px;
-    position: relative;
-    transition: background-color 0.2s;
-}
-
-.book-row::after {
+﻿.book-row::after {
     content: "";
     position: absolute;
     bottom: 0;
@@ -14,34 +6,6 @@
     right: 15px;  
     height: 1px;
     background-color: lightgray;
-}
-
-.book-cover {
-    width: 100px;
-    flex-shrink: 0;
-    margin-right: 15px;
-    border-radius: 4px;
-}
-
-.book-title{
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    text-decoration: none;
-}
-
-.book-meta {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.book-tags {
-    margin-top:5px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
 }
 
 .tag-badge {
@@ -69,12 +33,6 @@
     border: none;
     cursor: pointer;
     line-height: 1;
-}
-
-.description-container {
-    position: relative;
-    overflow: hidden;
-    margin-top:10px;
 }
 
 .book-description-full,

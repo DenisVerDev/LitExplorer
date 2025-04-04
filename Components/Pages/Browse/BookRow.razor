@@ -1,11 +1,9 @@
-﻿<div class="row w-100 book-row">
+﻿<div class="row w-100 book-row p-3 d-flex align-items-start position-relative">
 	<div class="col-12 col-md-2 mb-2">
 		<img class="w-100" src="@(SelectedBookSource.BookMeta.CoverImageUrl ?? "/images/default-cover.png")" alt="@Book.Title" />
 	</div>
-	<div class="col-12 col-md-10 book-info">
-		<div class="book-title">
-			@Book.Title
-		</div>
+	<div class="col-12 col-md-10">
+		<h5 class="fw-semibold text-dark d-inline">@Book.Title</h5>
 		@foreach (var bookSource in Book.BookSources)
 		{
 			@if(SelectedBookSource.BookSourceId == bookSource.BookSourceId)
@@ -14,8 +12,8 @@
 					SelectedAuthor = Authors.Where(a => a.AuthorId == bookSource.BookMeta.AuthorId).First();
 					SelectedSource = Sources.Where(s => s.SourceId == bookSource.SourceId).First();
 				}
-				<div>by @SelectedAuthor.AuthorName</div>
-				<div class="book-meta">
+				<h6 class="fw-normal text-dark d-block">by @SelectedAuthor.AuthorName</h6>
+				<div class="d-flex flex-wrap small text-muted">
 					<div>
 						<span>Rating: @bookSource.BookMeta.AverageRating</span>
 						<span class="ms-lg-1">Ratings: @bookSource.BookMeta.RatingsCount</span>
@@ -28,11 +26,11 @@
 						<span class="ms-lg-1">Last chapter: @bookSource.BookMeta.LastChapterReleaseDate!.Value.ToShortDateString()</span>
 					</div>
 				</div>
-				<div class="book-tags">
+				<div class="mt-1 d-flex flex-wrap">
 					@foreach(var tag in VisibleTags)
 					{
 						bool special = (tag.CategoryId == 6 || tag.CategoryId == 7);
-						<span class="tag-badge @(special ? "special-tag" : "")">@tag.TagName</span>
+						<span class="tag-badge @(special ? "special-tag" : "") me-1 mb-1">@tag.TagName</span>
 					}
 					@if (SelectedBookSource.Tags.Count() > 7)
 					{
@@ -41,11 +39,11 @@
 						</button>
 					}
 				</div>
-				<div class="description-container">
+				<div class="position-relative overflow-hidden">
 					@{
 						string descState = ShowFullDescription ? "book-description-full" : "book-description-clamped";
 					}
-					<div class="@descState">
+					<div class="@descState mt-1">
 						@((MarkupString)bookSource.BookMeta.Description!)
 					</div>
 					<button class="read-more" @onclick="ToggleDescription">
