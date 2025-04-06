@@ -1,225 +1,51 @@
-﻿.filter-panel {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+﻿.filter-panel{
+    background-color: var(--container-bg-color);
 }
 
-.filter-section {
-    margin-top: 0.25rem;
-    margin-bottom: 1rem;
-}
-
-.filter-padding{
-    padding-top: 6px;
-    padding-bottom: 6px;
-    padding-left: 16px;
-    padding-right: 16px;
-}
-
-/*---1st section---*/
 .tag-category {
     display: block;
     width: 100%;
     font-weight: 600;
-    color: #333;
+    color: var(--text-color);
     transition: background-color 0.2s ease, border-color 0.2s ease;
     cursor: pointer;
 }
 
 .tag-category:hover {
-    background-color: #f8f9fa;
-    border-color: #dee2e6;
+    background-color: var(--border-color);
+    border-color: var(--border-color);
 }
 
-/*---2nd section---*/
-.range-row {
-    margin-bottom: 1rem;
-}
-
-.range-row label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #333;
-}
-
-.range-inputs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.range-inputs input[type="text"] {
-    width: 40%;
+.range-input {
+    width: 50%;
+    height: 25%;
     padding: 0.4rem;
     font-size: 0.9rem;
-    border: 1px solid #ccc;
+    color: var(--text-color);
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
     border-radius: 4px;
     text-align: center;
     transition: border-color 0.2s ease;
 }
 
-.range-inputs input[type="text"]:hover {
-    border-color: #70b3e2;
-}
-
-.range-inputs input[type="text"]:focus {
-    border-color: #70b3e2;
+.range-input:hover,
+.range-input:focus {
+    border-color: var(--primary-subtle-color);
     outline:none;
 }
 
+.range-input::placeholder{
+    color: var(--text-subtle-color);
+}
+
 .divider {
-    display: inline-block;
     width: 30px;
     height: 2px;
-    background-color: #ccc;
+    background-color: var(--border-color);
     margin: 0 4px;
 }
 
-/* --- 3rd Section: Sources --- */
-.sources-section {
-    margin-top: -1rem;
-    margin-bottom: 1rem;
-}
-
-.sources-title {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: #333;
-    font-size: 1rem;
-}
-
-.source-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.75rem;
-}
-
-.source-checkbox {
-    display: none;
-}
-
-.custom-check-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: #333;
-    user-select: none;
-}
-
-.checkmark {
-    width: 16px;
-    height: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 8px;
-    position: relative;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-}
-
-.custom-check-label:hover .checkmark {
-    border-color: #70b3e2;
-}
-
-.source-checkbox:checked + .custom-check-label .checkmark {
-    background-color: #70b3e2;
-    border-color: #70b3e2;
-}
-
-.checkmark::after {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 5px;
-    width: 4px;
-    height: 8px;
-    border: solid #fff;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-    opacity: 0;
-    transition: opacity 0.2s ease;
-}
-
-.source-checkbox:checked + .custom-check-label .checkmark::after {
-    opacity: 1;
-}
-
-.source-name {
-    font-weight: 400;
-    color: #333;
-}
-
-/* 4th Section: Type */
-/* --- Type Section: Two columns in one row --- */
-.type-row {
-    display: flex;
-    gap: 1rem; /* Horizontal space between "Original" and "Fanfic" */
-}
-
-.type-row .source-item {
-    flex: 1;  /* Each checkbox takes half the row */
-}
-
-/* --- Status Section: Two columns side by side --- */
-.status-row {
-    display: flex;
-    gap: 1rem; /* Horizontal space between the two status columns */
-}
-
-/* Each column in the Status row */
-.status-col {
-    flex: 1; /* Each column takes half the available width */
-    display: flex;
-    flex-direction: column;
-}
-
-/* --- Last Section: Reset and Apply Buttons --- */
-.button-section {
-    margin-top: 1rem;
-    /* No divider or extra top border */
-}
-
-/* 
-   Reusing .range-inputs for consistent side-by-side layout
-   that matches the min/max fields above
-*/
-.button-section .range-inputs {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-/* Both buttons match the style (width/height) of your range inputs */
-.btn-reset,
-.btn-apply {
-    width: 40%;               /* same width as .range-inputs input[type="text"] */
-    padding: 0.3rem;          /* slightly less tall than 0.4rem for a slimmer look */
-    font-size: 0.9rem;        /* matches your input font-size */
-    border-radius: 4px;       /* same rounding as inputs */
-    text-align: center;       
-    border: 1px solid #ccc;   /* mimic the input border */
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-/* Reset button: white -> light gray on hover */
-.btn-reset {
-    background-color: #fff;
-    color: #333;
-}
-
-.btn-reset:hover {
-    background-color: #f2f2f2; /* a lighter gray hover */
-}
-
-/* Apply button: more intense blue -> lighter blue on hover */
-.btn-apply {
-    background-color: #228be6; /* deeper blue than before */
-    color: #fff;
-}
-
-.btn-apply:hover {
-    background-color: #3399ff; /* lighter blue on hover */
+.btn-fp {
+    width: 48%;
 }

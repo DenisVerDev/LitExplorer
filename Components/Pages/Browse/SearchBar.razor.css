@@ -1,20 +1,20 @@
 ﻿.searchbar-container{
     padding: 0.5rem;
     height:33px;
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
     border-radius: 0.5rem;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 .searchbar-container:hover,
 .searchbar-container:focus-within{
-    border-color: #70b3e2;
+    border-color: var(--primary-subtle-color);
 }
 
 .search-icon{
     margin-right: 0.5rem;
-    color: #888;
+    color: var(--border-color);
     display: flex;
     align-items: center;
     transition: color 0.2s ease;
@@ -22,6 +22,8 @@
 
 .searchbar-input{
     width:100%;
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
     border:none;
     box-shadow:none;
     outline:none;
@@ -29,5 +31,5 @@
 }
 
 .searchbar-input::placeholder{
-    color: #aaa;
+    color: var(--text-subtle-color);
 }

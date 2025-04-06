@@ -1,137 +1,137 @@
-﻿<div class="filter-panel">
-	@* 	1st part - 5 categories
+﻿<div class="filter-panel p-1 rounded-1">
+	@* 	
+	1st part - 5 categories
 	2nd part - rating, chapters, year
 	3rd part - sources
-	4th part - type and status
-	5th part - reset and apply buttons *@
-	<div class="filter-section"> @* 1st section *@
+	4th part - type
+	5th part - status
+	6th part - reset and apply buttons 
+	*@
+	<div class="mt-1 mb-1"> @* 1st part *@
 		@foreach (var tagCategory in SortedTagsCategories)
 		{
-			<div class="tag-category filter-padding">
+			<div class="tag-category p-1 ps-2 pe-2">
 				@tagCategory.CategoryName tags
 			</div>
 		}
 	</div>
-	<div class="filter-section filter-padding"> @* 2nd section *@
-		<div class="range-row">
-			<label>Average Rating</label>
-			<div class="range-inputs">
-				<input type="text" placeholder="min" />
+	<div class="p-1 ps-2 pe-2"> @* 2nd part *@
+		<div class="mb-3">
+			<label class="fw-semibold mb-2">Average Rating</label>
+			<div class="d-flex align-items-center justify-content-between">
+				<input class="range-input" type="text" placeholder="min" />
 				<div class="divider"></div>
-				<input type="text" placeholder="max" />
+				<input class="range-input" type="text" placeholder="max" />
 			</div>
 		</div>
 
-		<div class="range-row">
-			<label>Chapters Number</label>
-			<div class="range-inputs">
-				<input type="text" placeholder="min" />
+		<div class="mb-3">
+			<label class="fw-semibold mb-2">Chapters Number</label>
+			<div class="d-flex align-items-center justify-content-between">
+				<input class="range-input" type="text" placeholder="min" />
 				<div class="divider"></div>
-				<input type="text" placeholder="max" />
+				<input class="range-input" type="text" placeholder="max" />
 			</div>
 		</div>
 
-		<div class="range-row">
-			<label>Release Year</label>
-			<div class="range-inputs">
-				<input type="text" placeholder="min" />
+		<div class="mb-1">
+			<label class="fw-semibold mb-2">Release Year</label>
+			<div class="d-flex align-items-center justify-content-between">
+				<input class="range-input" type="text" placeholder="min" />
 				<div class="divider"></div>
-				<input type="text" placeholder="max" />
+				<input class="range-input" type="text" placeholder="max" />
 			</div>
 		</div>
 	</div>
-	<div class="filter-section filter-padding sources-section"> @* 3rd section *@
-		<label class="sources-title">Sources</label>
+	<div class="p-1 ps-2 pe-2"> @* 3rd part *@
+		<label class="fw-semibold mb-2">Sources</label>
 		@foreach (var source in Sources)
 		{
-			<div class="source-item">
+			<div class="d-flex align-items-center mb-1">
 				<!-- The hidden native checkbox -->
-				<input type="checkbox" id="source_@(source.SourceId)" class="source-checkbox" />
+				<input type="checkbox" id="source_@(source.SourceId)" class="litexp-checkbox" />
 
 				<!-- The custom checkbox + label text -->
-				<label for="source_@(source.SourceId)" class="custom-check-label">
+				<label for="source_@(source.SourceId)" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
-					<span class="source-name">@source.SourceName</span>
+					<span>@source.SourceName</span>
 				</label>
 			</div>
 		}
 	</div>
-	<div class="filter-section filter-padding type-section">
-		@* Type title, checkboxes with stuff *@
-		<label class="sources-title">Type</label>
-		<div class="type-row">
+	<div class="p-1 ps-2 pe-2"> @* 4th part *@
+		<label class="fw-semibold mb-2">Type</label>
+		<div class="d-flex gap-3">
 			<!-- Left column (Original) -->
-			<div class="source-item">
-				<input type="checkbox" id="type-original" class="source-checkbox" />
-				<label for="type-original" class="custom-check-label">
+			<div class="flex-fill d-flex align-items-center mb-1">
+				<input type="checkbox" id="type-original" class="litexp-checkbox" />
+				<label for="type-original" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
-					<span class="source-name">Original</span>
+					<span>Original</span>
 				</label>
 			</div>
 
 			<!-- Right column (Fanfic) -->
-			<div class="source-item">
-				<input type="checkbox" id="type-fanfic" class="source-checkbox" />
-				<label for="type-fanfic" class="custom-check-label">
+			<div class="flex-fill d-flex align-items-center mb-1">
+				<input type="checkbox" id="type-fanfic" class="litexp-checkbox" />
+				<label for="type-fanfic" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
-					<span class="source-name">Fanfic</span>
+					<span>Fanfic</span>
 				</label>
 			</div>
 		</div>
 	</div>
-	<div class="filter-section filter-padding status-section">
-		@* Status title, checkboxes with stuff *@
-		<label class="sources-title">Status</label>
-		<div class="status-row">
+	<div class="p-1 ps-2 pe-2"> @* 5th part *@
+		<label class="fw-semibold mb-2">Status</label>
+		<div class="d-flex gap-3">
 			<!-- Left column: 3 checkboxes -->
-			<div class="status-col">
-				<div class="source-item">
-					<input type="checkbox" id="status-ongoing" class="source-checkbox" />
-					<label for="status-ongoing" class="custom-check-label">
+			<div class="flex-fill d-flex flex-column">
+				<div class="d-flex align-items-center mb-1">
+					<input type="checkbox" id="status-ongoing" class="litexp-checkbox" />
+					<label for="status-ongoing" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="source-name">Ongoing</span>
+						<span>Ongoing</span>
 					</label>
 				</div>
-				<div class="source-item">
-					<input type="checkbox" id="status-completed" class="source-checkbox" />
-					<label for="status-completed" class="custom-check-label">
+				<div class="d-flex align-items-center mb-1">
+					<input type="checkbox" id="status-completed" class="litexp-checkbox" />
+					<label for="status-completed" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="source-name">Completed</span>
+						<span>Completed</span>
 					</label>
 				</div>
-				<div class="source-item">
-					<input type="checkbox" id="status-stubbed" class="source-checkbox" />
-					<label for="status-stubbed" class="custom-check-label">
+				<div class="d-flex align-items-center mb-1">
+					<input type="checkbox" id="status-stubbed" class="litexp-checkbox" />
+					<label for="status-stubbed" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="source-name">Stubbed</span>
+						<span>Stubbed</span>
 					</label>
 				</div>
 			</div>
 
 			<!-- Right column: 2 checkboxes -->
-			<div class="status-col">
-				<div class="source-item">
-					<input type="checkbox" id="status-dropped" class="source-checkbox" />
-					<label for="status-dropped" class="custom-check-label">
+			<div class="flex-fill d-flex flex-column">
+				<div class="d-flex align-items-center mb-1">
+					<input type="checkbox" id="status-dropped" class="litexp-checkbox" />
+					<label for="status-dropped" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="source-name">Dropped</span>
+						<span>Dropped</span>
 					</label>
 				</div>
-				<div class="source-item">
-					<input type="checkbox" id="status-hiatus" class="source-checkbox" />
-					<label for="status-hiatus" class="custom-check-label">
+				<div class="d-flex align-items-center mb-1">
+					<input type="checkbox" id="status-hiatus" class="litexp-checkbox" />
+					<label for="status-hiatus" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="source-name">Hiatus</span>
+						<span>Hiatus</span>
 					</label>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- Last Section: Reset and Apply Buttons -->
-	<div class="filter-section filter-padding button-section">
-		<div class="range-inputs">
-			<button class="btn-reset">Reset</button>
-			<button class="btn-apply">Apply</button>
+	<div class="p-1 ps-2 pe-2 mt-1"> @* 6th part *@
+		<div class="d-flex align-items-center justify-content-between">
+			<button class="litexp-btn litexp-btn-ps btn-fp">Reset</button>
+			<button class="litexp-btn litexp-btn-p btn-fp">Apply</button>
 		</div>
 	</div>
 </div>

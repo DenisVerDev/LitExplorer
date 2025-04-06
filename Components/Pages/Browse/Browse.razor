@@ -1,13 +1,12 @@
 ﻿@page "/Browse"
-@rendermode InteractiveServer
 @inject BrowseService BrowseService
 @inject MetadataService MetadataService
 
 <PageTitle>Browse literature</PageTitle>
 
-<div class="container browse-container">
+<div class="container p-md-3 p-0">
 	<div class="row w-100 m-0">
-		<div class="col-12 col-md-9 order-2 order-md-1">
+		<div class="col-12 col-md-9 order-2 order-md-1 p-3 rounded-1 books-list">
 			<div class="row w-100 m-0">
 				@* here would be browse title and sort by inputs *@
 			</div>
@@ -31,7 +30,7 @@
 				}
 			</div>
 		</div>
-		<div class="col-12 col-md-3 order-1 order-md-2 mb-3">
+		<div class="col-12 col-md-3 order-1 order-md-2 mb-3 mt-3 mt-md-0">
 			@if (TagsCategories != null && TagsCategories.Count > 0)
 			{
 				<FilterPanel Filter="Filter"

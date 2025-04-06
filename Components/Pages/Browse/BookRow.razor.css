@@ -1,80 +1,27 @@
-﻿.book-row {
-    display: flex;
-    align-items: flex-start;
-    padding: 15px;
-    position: relative;
-    transition: background-color 0.2s;
-}
-
-.book-row::after {
+﻿.book-row::after {
     content: "";
     position: absolute;
     bottom: 0;
     left: 15px;   
     right: 15px;  
     height: 1px;
-    background-color: lightgray;
+    background-color:  var(--border-color);
 }
 
-.book-cover {
-    width: 100px;
-    flex-shrink: 0;
-    margin-right: 15px;
-    border-radius: 4px;
+.author{
+    font-weight: normal;
+    color: var(--text-subtle-color);
+    display: block;
 }
 
-.book-title{
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    text-decoration: none;
+.meta{
+    font-size: small;
+    color: var(--text-subtle-color);
 }
 
-.book-meta {
-    display: flex;
-    flex-wrap: wrap;
-    font-size: 0.9rem;
-    color: var(--text-muted);
-}
-
-.book-tags {
-    margin-top:5px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-}
-
-.tag-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    font-size: 0.75rem;
-    border-radius: 0.2rem;
-    background-color: lightgray;
-}
-
-.special-tag {
-    background-color: #228be6;
-    color: #fff;
-}
-
-.more-tags-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px 10px;
-    font-size: 0.75rem;
-    border-radius: 0.2rem;
-    background-color: #70b3e2;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    line-height: 1;
-}
-
-.description-container {
-    position: relative;
-    overflow: hidden;
-    margin-top:10px;
+.btn-tags-toggle{
+    width: 30px;
+    height: auto;
 }
 
 .book-description-full,
@@ -94,7 +41,7 @@
 .read-more {
     background: none;
     border: none;
-    color: #0d6efd;
+    color: var(--primary-color);
     font-size: 0.9rem;
     cursor: pointer;
     padding: 0;
@@ -102,5 +49,5 @@
 }
 
 .read-more:hover{
-    color: #dc3545;
+    color: var(--secondary-color);
 }

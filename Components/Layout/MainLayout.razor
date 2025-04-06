@@ -1,8 +1,39 @@
 ﻿@inherits LayoutComponentBase
+@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject IJSRuntime JS
 
 <header>
-	<NavMenu/>
+	<NavMenu IsDarkTheme="isDarkTheme" OnToggleTheme="ToggleThemeAsync" />
 </header>
 <main>
 	@Body
 </main>
+
+@code{
+	private bool isDarkTheme = false; // light theme by default
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+		{
+			var result = await ProtectedLocalStorage.GetAsync<bool>("isDarkTheme");
+			if (result.Success)
+				isDarkTheme = result.Value;
+
+			await ApplyThemeAsync();
+		}
+	}
+
+	private async Task ApplyThemeAsync()
+	{
+		await JS.InvokeVoidAsync("toggleTheme", isDarkTheme);
+		StateHasChanged();
+	}
+
+	private async Task ToggleThemeAsync()
+	{
+		isDarkTheme = !isDarkTheme;
+		await ProtectedLocalStorage.SetAsync("isDarkTheme", isDarkTheme);
+		await ApplyThemeAsync();
+	}
+}
