@@ -5,7 +5,18 @@
     left: 15px;   
     right: 15px;  
     height: 1px;
-    background-color: lightgray;
+    background-color:  var(--border-color);
+}
+
+.author{
+    font-weight: normal;
+    color: var(--text-subtle-color);
+    display: block;
+}
+
+.meta{
+    font-size: small;
+    color: var(--text-subtle-color);
 }
 
 .btn-tags-toggle{

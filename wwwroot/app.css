@@ -6,7 +6,7 @@
     --primary-subtle-color: #3399ff;
     --secondary-color: #dd7419;
     --text-color: black;
-    --text-subtle-color: #aaa;
+    --text-subtle-color: #888;
     --text-contrast-color: white;
 }
 
@@ -59,7 +59,7 @@ main{
     left: 5px;
     width: 4px;
     height: 8px;
-    border: solid var(--container-bg-color);
+    border: solid var(--text-contrast-color); /*???*/
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
     opacity: 0;
@@ -96,7 +96,7 @@ main{
 }
 
 .litexp-btn-ps:hover {
-    background-color: var(--bg-color);
+    background-color: var(--border-color);
 }
 
 /*--badges--*/
@@ -129,4 +129,12 @@ main{
 
 .litexp-badge-pi:hover{
     background-color: var(--primary-subtle-color);
+}
+
+/*-----DARK THEME-----*/
+body.dark-theme {
+    --container-bg-color: #2e2e2e;
+    --bg-color: #1c1c1c;
+    --border-color: #555555;
+    --text-color: #f0f0f0;
 }

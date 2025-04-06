@@ -22,6 +22,8 @@
 
 .searchbar-input{
     width:100%;
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
     border:none;
     box-shadow:none;
     outline:none;

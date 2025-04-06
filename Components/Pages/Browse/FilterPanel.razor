@@ -1,4 +1,4 @@
-﻿<div class="bg-white p-1 rounded-1">
+﻿<div class="filter-panel p-1 rounded-1">
 	@* 	
 	1st part - 5 categories
 	2nd part - rating, chapters, year
@@ -17,7 +17,7 @@
 	</div>
 	<div class="p-1 ps-2 pe-2"> @* 2nd part *@
 		<div class="mb-3">
-			<label class="fw-semibold text-dark mb-2">Average Rating</label>
+			<label class="fw-semibold mb-2">Average Rating</label>
 			<div class="d-flex align-items-center justify-content-between">
 				<input class="range-input" type="text" placeholder="min" />
 				<div class="divider"></div>
@@ -26,7 +26,7 @@
 		</div>
 
 		<div class="mb-3">
-			<label class="fw-semibold text-dark mb-2">Chapters Number</label>
+			<label class="fw-semibold mb-2">Chapters Number</label>
 			<div class="d-flex align-items-center justify-content-between">
 				<input class="range-input" type="text" placeholder="min" />
 				<div class="divider"></div>
@@ -35,7 +35,7 @@
 		</div>
 
 		<div class="mb-1">
-			<label class="fw-semibold text-dark mb-2">Release Year</label>
+			<label class="fw-semibold mb-2">Release Year</label>
 			<div class="d-flex align-items-center justify-content-between">
 				<input class="range-input" type="text" placeholder="min" />
 				<div class="divider"></div>
@@ -44,7 +44,7 @@
 		</div>
 	</div>
 	<div class="p-1 ps-2 pe-2"> @* 3rd part *@
-		<label class="fw-semibold text-dark mb-2">Sources</label>
+		<label class="fw-semibold mb-2">Sources</label>
 		@foreach (var source in Sources)
 		{
 			<div class="d-flex align-items-center mb-1">
@@ -54,20 +54,20 @@
 				<!-- The custom checkbox + label text -->
 				<label for="source_@(source.SourceId)" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
-					<span class="text-dark">@source.SourceName</span>
+					<span>@source.SourceName</span>
 				</label>
 			</div>
 		}
 	</div>
 	<div class="p-1 ps-2 pe-2"> @* 4th part *@
-		<label class="fw-semibold text-dark mb-2">Type</label>
+		<label class="fw-semibold mb-2">Type</label>
 		<div class="d-flex gap-3">
 			<!-- Left column (Original) -->
 			<div class="flex-fill d-flex align-items-center mb-1">
 				<input type="checkbox" id="type-original" class="litexp-checkbox" />
 				<label for="type-original" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
-					<span class="text-dark">Original</span>
+					<span>Original</span>
 				</label>
 			</div>
 
@@ -76,13 +76,13 @@
 				<input type="checkbox" id="type-fanfic" class="litexp-checkbox" />
 				<label for="type-fanfic" class="litexp-checkbox-label">
 					<span class="checkmark"></span>
-					<span class="text-dark">Fanfic</span>
+					<span>Fanfic</span>
 				</label>
 			</div>
 		</div>
 	</div>
 	<div class="p-1 ps-2 pe-2"> @* 5th part *@
-		<label class="fw-semibold text-dark mb-2">Status</label>
+		<label class="fw-semibold mb-2">Status</label>
 		<div class="d-flex gap-3">
 			<!-- Left column: 3 checkboxes -->
 			<div class="flex-fill d-flex flex-column">
@@ -90,21 +90,21 @@
 					<input type="checkbox" id="status-ongoing" class="litexp-checkbox" />
 					<label for="status-ongoing" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="text-dark">Ongoing</span>
+						<span>Ongoing</span>
 					</label>
 				</div>
 				<div class="d-flex align-items-center mb-1">
 					<input type="checkbox" id="status-completed" class="litexp-checkbox" />
 					<label for="status-completed" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="text-dark">Completed</span>
+						<span>Completed</span>
 					</label>
 				</div>
 				<div class="d-flex align-items-center mb-1">
 					<input type="checkbox" id="status-stubbed" class="litexp-checkbox" />
 					<label for="status-stubbed" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="text-dark">Stubbed</span>
+						<span>Stubbed</span>
 					</label>
 				</div>
 			</div>
@@ -115,14 +115,14 @@
 					<input type="checkbox" id="status-dropped" class="litexp-checkbox" />
 					<label for="status-dropped" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="text-dark">Dropped</span>
+						<span>Dropped</span>
 					</label>
 				</div>
 				<div class="d-flex align-items-center mb-1">
 					<input type="checkbox" id="status-hiatus" class="litexp-checkbox" />
 					<label for="status-hiatus" class="litexp-checkbox-label">
 						<span class="checkmark"></span>
-						<span class="text-dark">Hiatus</span>
+						<span>Hiatus</span>
 					</label>
 				</div>
 			</div>

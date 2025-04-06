@@ -3,7 +3,7 @@
 		<img class="w-100" src="@(SelectedBookSource.BookMeta.CoverImageUrl ?? "/images/default-cover.png")" alt="@Book.Title" />
 	</div>
 	<div class="col-12 col-md-10">
-		<h5 class="fw-semibold text-dark d-inline">@Book.Title</h5>
+		<h5 class="fw-semibold d-inline">@Book.Title</h5>
 		@foreach (var bookSource in Book.BookSources)
 		{
 			@if(SelectedBookSource.BookSourceId == bookSource.BookSourceId)
@@ -12,8 +12,8 @@
 					SelectedAuthor = Authors.Where(a => a.AuthorId == bookSource.BookMeta.AuthorId).First();
 					SelectedSource = Sources.Where(s => s.SourceId == bookSource.SourceId).First();
 				}
-				<h6 class="fw-normal text-dark d-block">by @SelectedAuthor.AuthorName</h6>
-				<div class="d-flex flex-wrap small text-muted">
+				<h6 class="author">by @SelectedAuthor.AuthorName</h6>
+				<div class="meta">
 					<div>
 						<span>Rating: @bookSource.BookMeta.AverageRating</span>
 						<span class="ms-lg-1">Ratings: @bookSource.BookMeta.RatingsCount</span>
