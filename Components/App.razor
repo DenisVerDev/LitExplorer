@@ -8,12 +8,13 @@
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css" />
     <link rel="stylesheet" href="app.css" />
     <link rel="stylesheet" href="LitExplorer.styles.css" />
-    <HeadOutlet />
+    <HeadOutlet @rendermode="InteractiveServer" />
 </head>
 
-<body class="dark-theme">
-    <Routes />
+<body>
+    <Routes @rendermode="InteractiveServer"/>
     <script src="bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="app.js"></script>
     <script src="_framework/blazor.web.js"></script>
 </body>
 
