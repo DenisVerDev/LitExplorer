@@ -165,6 +165,8 @@
 
 	private async Task ResetFiltersAsync()
 	{
+		Filter.Title = null;
+
 		RangeModelsUI.ForEach(r =>
 		{
 			r.MinValue = null;

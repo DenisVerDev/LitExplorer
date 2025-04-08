@@ -11,7 +11,7 @@
 				@* here would be browse title and sort by inputs *@
 			</div>
 			<div class="row w-100 m-0">
-				<SearchBar />
+				<SearchBar Filter="Filter" OnSeachByTitle="OnApplyFilterAsync" />
 			</div>
 			<div class="row w-100 m-0">
 				@if ((Books != null && Books.Count > 0) && (Authors != null && Authors.Count > 0))

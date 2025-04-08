@@ -1,4 +1,4 @@
-﻿<form class="searchbar-container d-flex align-items-center" @onsubmit:preventDefault @onsubmit="SubmitSearchByTitle">
+﻿<form class="searchbar-container d-flex align-items-center" @onsubmit:preventDefault @onsubmit="SearchByTitleAsync">
     <button class="search-icon btn p-0 border-0 bg-transparent" type="submit">
         <svg xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 512 512"
@@ -16,15 +16,16 @@
            144 144 0 1 0 0 288z"></path>
         </svg>
     </button>
-    <input class="searchbar-input" type="text" placeholder="Search by title" @bind=Title />
+    <input class="searchbar-input" type="text" placeholder="Search by title" @bind=Filter.Title />
 </form>
 
 @code{
-    private string Title { get; set; } = String.Empty;
+    [Parameter]
+    public BrowseFilterDTO Filter { get; set; } = null!;
 
     [Parameter]
-    public EventCallback<string> OnSeachByTitle { get; set; }
+    public EventCallback OnSeachByTitle { get; set; }
 
-    private async Task SubmitSearchByTitle()
-    => await OnSeachByTitle.InvokeAsync(Title);
+    private async Task SearchByTitleAsync()
+    => await OnSeachByTitle.InvokeAsync();
 }
