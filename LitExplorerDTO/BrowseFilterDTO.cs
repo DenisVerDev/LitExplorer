@@ -26,11 +26,11 @@
 
         public List<int>? Sources { get; set; }
 
-        public KeyValuePair<double, double>? AverageRatingRange { get; set; }
+        public KeyValuePair<double?, double?> AverageRatingRange { get; set; }
 
-        public KeyValuePair<int, int>? ChaptersCountRange { get; set; }
+        public KeyValuePair<int?, int?> ChaptersCountRange { get; set; }
 
-        public KeyValuePair<int, int>? ActivityYearRange { get; set; }
+        public KeyValuePair<int?, int?> ActivityYearRange { get; set; }
 
         public SortByOptions SortByOption { get; set; }
 
