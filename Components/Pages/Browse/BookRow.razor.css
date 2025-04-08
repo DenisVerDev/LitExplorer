@@ -15,8 +15,8 @@
 }
 
 .meta{
-    font-size: small;
     color: var(--text-subtle-color);
+    margin-left: -2px;
 }
 
 .btn-tags-toggle{
