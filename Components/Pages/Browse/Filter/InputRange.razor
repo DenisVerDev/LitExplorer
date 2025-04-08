@@ -1,0 +1,11 @@
+﻿<label class="fw-semibold mb-2">@Model.Name</label>
+<div class="d-flex align-items-center justify-content-between">
+	<input class="range-input" type="number" placeholder="min" min="@Model.MinLimit" max="@(Model.MaxLimit-1)" @bind="@Model.MinValue" />
+	<div class="divider"></div>
+	<input class="range-input" type="number" placeholder="max" min="@(Model.MinLimit+1)" max="@(Model.MaxLimit)" @bind="@Model.MaxValue" />
+</div>
+
+@code{
+	[Parameter]
+	public InputRangeModel Model { get; set; } = null!;
+}

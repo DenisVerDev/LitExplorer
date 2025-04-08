@@ -1,0 +1,41 @@
+﻿.range-input {
+    width: 50%;
+    height: 25%;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    transition: border-color 0.2s ease;
+}
+
+.range-input:hover,
+.range-input:focus {
+    border-color: var(--primary-subtle-color);
+    outline:none;
+}
+
+.range-input::placeholder{
+    color: var(--text-subtle-color);
+}
+
+.divider {
+    width: 30px;
+    height: 2px;
+    background-color: var(--border-color);
+    margin: 0 4px;
+}
+
+/* Hide spinner controls in WebKit-based browsers (Chrome, Safari, Edge) */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Hide spinner controls in Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}

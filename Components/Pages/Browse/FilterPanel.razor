@@ -11,30 +11,13 @@
 	</div>
 	<div class="p-1 ps-2 pe-2"> @* 2nd part *@
 		<div class="mb-3">
-			<label class="fw-semibold mb-2">Average Rating</label>
-			<div class="d-flex align-items-center justify-content-between">
-				<input class="range-input" type="text" placeholder="min" />
-				<div class="divider"></div>
-				<input class="range-input" type="text" placeholder="max" />
-			</div>
+			<InputRange Model="RangeModelsUI[0]" />
 		</div>
-
 		<div class="mb-3">
-			<label class="fw-semibold mb-2">Chapters Number</label>
-			<div class="d-flex align-items-center justify-content-between">
-				<input class="range-input" type="text" placeholder="min" />
-				<div class="divider"></div>
-				<input class="range-input" type="text" placeholder="max" />
-			</div>
+			<InputRange Model="RangeModelsUI[1]" />
 		</div>
-
 		<div class="mb-1">
-			<label class="fw-semibold mb-2">Release Year</label>
-			<div class="d-flex align-items-center justify-content-between">
-				<input class="range-input" type="text" placeholder="min" />
-				<div class="divider"></div>
-				<input class="range-input" type="text" placeholder="max" />
-			</div>
+			<InputRange Model="RangeModelsUI[2]" />
 		</div>
 	</div>
 	<div class="p-1 ps-2 pe-2"> @* 3rd part *@
@@ -103,6 +86,8 @@
 	private List<CheckboxModel> TypeTagsUI { get; set; } = null!;
 	private List<CheckboxModel> StatusTagsUI { get; set; } = null!;
 
+	private List<InputRangeModel> RangeModelsUI { get; set; } = null!;
+
 	protected override void OnInitialized()
 	{
 		SortedTagsCategories = TagsCategories!.OrderBy(tc => tc.CategoryId).Take(5).ToList();
@@ -130,5 +115,26 @@
 			Group = "statusTags",
 			Value = t.TagId
 		}).ToList();
+
+		RangeModelsUI = new List<InputRangeModel>()
+		{
+			new InputRangeModel()
+			{
+				Name = "Average Rating",
+				MinLimit = 0,
+				MaxLimit = 5
+			},
+			new InputRangeModel()
+			{
+				Name = "Chapters Number",
+				MinLimit = 1,
+			},
+			new InputRangeModel()
+			{
+				Name = "Activity Years",
+				MinLimit = 2000,
+				MaxLimit = DateTime.Now.Year
+			}
+		};
 	}
 }
