@@ -67,7 +67,7 @@
 	</div>
 	<div class="p-1 ps-2 pe-2 mt-1"> @* 6th part *@
 		<div class="d-flex align-items-center justify-content-between">
-			<button class="litexp-btn litexp-btn-ps btn-fp">Reset</button>
+			<button class="litexp-btn litexp-btn-ps btn-fp" @onclick="ResetFiltersAsync">Reset</button>
 			<button class="litexp-btn litexp-btn-p btn-fp" @onclick="ApplyFilterAsync">Apply</button>
 		</div>
 	</div>
@@ -88,11 +88,11 @@
 
 	private List<TagsCategoryDTO> SortedTagsCategories { get; set; } = null!;
 
+	private List<InputRangeModel> RangeModelsUI { get; set; } = null!;
+
 	private List<CheckboxModel> SourcesUI { get; set; } = null!;
 	private List<CheckboxModel> TypeTagsUI { get; set; } = null!;
 	private List<CheckboxModel> StatusTagsUI { get; set; } = null!;
-
-	private List<InputRangeModel> RangeModelsUI { get; set; } = null!;
 
 	protected override void OnInitialized()
 	{
@@ -161,5 +161,20 @@
 		Filter.Tags!.AddRange(StatusTagsUI.Where(t => t.IsSelected).Select(t => t.Value));
 
 		await OnApplyFilter.InvokeAsync();
+	}
+
+	private async Task ResetFiltersAsync()
+	{
+		RangeModelsUI.ForEach(r =>
+		{
+			r.MinValue = null;
+			r.MaxValue = null;
+		});
+
+		SourcesUI.ForEach(s => s.IsSelected = false);
+		TypeTagsUI.ForEach(t => t.IsSelected = false);
+		StatusTagsUI.ForEach(t => t.IsSelected = false);
+
+		await ApplyFilterAsync();
 	}
 }
