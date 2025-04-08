@@ -4,10 +4,10 @@
     {
         public string Name { get; set; } = "Default input range";
 
-        public int MinLimit { get; set; } = 0;
-        public int MaxLimit { get; set; } = int.MaxValue;
+        public double MinLimit { get; set; } = 0;
+        public double MaxLimit { get; set; } = double.MaxValue;
 
-        public int? MinValue 
+        public double? MinValue 
         { 
             get => minValue;
             set
@@ -17,7 +17,7 @@
                 else minValue = null;
             }
         }
-        public int? MaxValue 
+        public double? MaxValue 
         { 
             get => maxValue;
             set
@@ -28,7 +28,7 @@
             }
         }
 
-        private int? minValue;
-        private int? maxValue;
+        private double? minValue;
+        private double? maxValue;
     }
 }
