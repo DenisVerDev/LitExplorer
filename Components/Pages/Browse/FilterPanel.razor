@@ -1,12 +1,6 @@
-﻿<div class="filter-panel p-1 rounded-1">
-	@* 	
-	1st part - 5 categories
-	2nd part - rating, chapters, year
-	3rd part - sources
-	4th part - type
-	5th part - status
-	6th part - reset and apply buttons 
-	*@
+﻿@using LitExplorer.Components.Pages.Browse.Filter
+
+<div class="filter-panel p-1 rounded-1">
 	<div class="mt-1 mb-1"> @* 1st part *@
 		@foreach (var tagCategory in SortedTagsCategories)
 		{
@@ -45,17 +39,10 @@
 	</div>
 	<div class="p-1 ps-2 pe-2"> @* 3rd part *@
 		<label class="fw-semibold mb-2">Sources</label>
-		@foreach (var source in Sources)
+		@foreach (var sourceUI in SourcesUI)
 		{
 			<div class="d-flex align-items-center mb-1">
-				<!-- The hidden native checkbox -->
-				<input type="checkbox" id="source_@(source.SourceId)" class="litexp-checkbox" />
-
-				<!-- The custom checkbox + label text -->
-				<label for="source_@(source.SourceId)" class="litexp-checkbox-label">
-					<span class="checkmark"></span>
-					<span>@source.SourceName</span>
-				</label>
+				<Checkbox Model="sourceUI" />
 			</div>
 		}
 	</div>
@@ -64,20 +51,11 @@
 		<div class="d-flex gap-3">
 			<!-- Left column (Original) -->
 			<div class="flex-fill d-flex align-items-center mb-1">
-				<input type="checkbox" id="type-original" class="litexp-checkbox" />
-				<label for="type-original" class="litexp-checkbox-label">
-					<span class="checkmark"></span>
-					<span>Original</span>
-				</label>
+				<Checkbox Model="TypeTagsUI[0]"/>
 			</div>
-
 			<!-- Right column (Fanfic) -->
 			<div class="flex-fill d-flex align-items-center mb-1">
-				<input type="checkbox" id="type-fanfic" class="litexp-checkbox" />
-				<label for="type-fanfic" class="litexp-checkbox-label">
-					<span class="checkmark"></span>
-					<span>Fanfic</span>
-				</label>
+				<Checkbox Model="TypeTagsUI[1]" />
 			</div>
 		</div>
 	</div>
@@ -86,45 +64,21 @@
 		<div class="d-flex gap-3">
 			<!-- Left column: 3 checkboxes -->
 			<div class="flex-fill d-flex flex-column">
-				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-ongoing" class="litexp-checkbox" />
-					<label for="status-ongoing" class="litexp-checkbox-label">
-						<span class="checkmark"></span>
-						<span>Ongoing</span>
-					</label>
-				</div>
-				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-completed" class="litexp-checkbox" />
-					<label for="status-completed" class="litexp-checkbox-label">
-						<span class="checkmark"></span>
-						<span>Completed</span>
-					</label>
-				</div>
-				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-stubbed" class="litexp-checkbox" />
-					<label for="status-stubbed" class="litexp-checkbox-label">
-						<span class="checkmark"></span>
-						<span>Stubbed</span>
-					</label>
-				</div>
+				@for(int i = 0; i < 3; i++)
+				{
+					<div class="d-flex align-items-center mb-1">
+						<Checkbox Model="StatusTagsUI[i]" />
+					</div>
+				}
 			</div>
-
 			<!-- Right column: 2 checkboxes -->
 			<div class="flex-fill d-flex flex-column">
-				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-dropped" class="litexp-checkbox" />
-					<label for="status-dropped" class="litexp-checkbox-label">
-						<span class="checkmark"></span>
-						<span>Dropped</span>
-					</label>
-				</div>
-				<div class="d-flex align-items-center mb-1">
-					<input type="checkbox" id="status-hiatus" class="litexp-checkbox" />
-					<label for="status-hiatus" class="litexp-checkbox-label">
-						<span class="checkmark"></span>
-						<span>Hiatus</span>
-					</label>
-				</div>
+				@for(int i = 3; i < StatusTagsUI.Count; i++)
+				{
+					<div class="d-flex align-items-center mb-1">
+						<Checkbox Model="StatusTagsUI[i]" />
+					</div>
+				}
 			</div>
 		</div>
 	</div>
@@ -137,10 +91,6 @@
 </div>
 
 @code{
-
-	[Parameter]
-	public BrowseFilterDTO Filter { get; set; } = null!;
-
 	[Parameter]
 	public List<SourceDTO> Sources { get; set; } = null!;
 
@@ -149,8 +99,36 @@
 
 	private List<TagsCategoryDTO> SortedTagsCategories { get; set; } = null!;
 
+	private List<CheckboxModel> SourcesUI { get; set; } = null!;
+	private List<CheckboxModel> TypeTagsUI { get; set; } = null!;
+	private List<CheckboxModel> StatusTagsUI { get; set; } = null!;
+
 	protected override void OnInitialized()
 	{
 		SortedTagsCategories = TagsCategories!.OrderBy(tc => tc.CategoryId).Take(5).ToList();
+
+		SourcesUI = Sources.Select(s => new CheckboxModel()
+		{
+			IsSelected = false,
+			Name = s.SourceName,
+			Group = "sources",
+			Value = s.SourceId
+		}).ToList();
+
+		TypeTagsUI = TagsCategories.Where(tc => tc.CategoryId == 6).SelectMany(tc => tc.Tags).Select(t => new CheckboxModel()
+		{
+			IsSelected = false,
+			Name = t.TagName,
+			Group = "typeTags",
+			Value = t.TagId
+		}).ToList();
+
+		StatusTagsUI = TagsCategories.Where(tc => tc.CategoryId == 7).SelectMany(tc => tc.Tags).Select(t => new CheckboxModel()
+		{
+			IsSelected = false,
+			Name = t.TagName,
+			Group = "statusTags",
+			Value = t.TagId
+		}).ToList();
 	}
 }
