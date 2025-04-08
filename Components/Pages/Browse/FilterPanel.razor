@@ -1,76 +1,89 @@
 ﻿@using LitExplorer.Components.Pages.Browse.Filter
 
 <div class="filter-panel p-1 rounded-1">
-	<div class="mt-1 mb-1"> @* 1st part *@
-		@foreach (var tagCategory in SortedTagsCategories)
-		{
-			<div class="tag-category p-1 ps-2 pe-2">
-				@tagCategory.CategoryName tags
-			</div>
-		}
-	</div>
-	<div class="p-1 ps-2 pe-2"> @* 2nd part *@
-		<div class="mb-3">
-			<InputRange Model="RangeModelsUI[0]" />
+	@if (SelectedTagsCategory == null)
+	{
+		<div class="mt-1 mb-1">
+			@* 1st part *@
+			@foreach (var tagCategory in SortedTagsCategories)
+			{
+				<div class="tag-category p-1 ps-2 pe-2" @onclick="()=>SelectedTagsCategory=tagCategory">
+					@tagCategory.CategoryName tags
+				</div>
+			}
 		</div>
-		<div class="mb-3">
-			<InputRange Model="RangeModelsUI[1]" />
-		</div>
-		<div class="mb-1">
-			<InputRange Model="RangeModelsUI[2]" />
-		</div>
-	</div>
-	<div class="p-1 ps-2 pe-2"> @* 3rd part *@
-		<label class="fw-semibold mb-2">Sources</label>
-		@foreach (var sourceUI in SourcesUI)
-		{
-			<div class="d-flex align-items-center mb-1">
-				<Checkbox Model="sourceUI" />
+		<div class="p-1 ps-2 pe-2">
+			@* 2nd part *@
+			<div class="mb-3">
+				<InputRange Model="RangeModelsUI[0]" />
 			</div>
-		}
-	</div>
-	<div class="p-1 ps-2 pe-2"> @* 4th part *@
-		<label class="fw-semibold mb-2">Type</label>
-		<div class="d-flex gap-3">
-			<!-- Left column (Original) -->
-			<div class="flex-fill d-flex align-items-center mb-1">
-				<Checkbox Model="TypeTagsUI[0]"/>
+			<div class="mb-3">
+				<InputRange Model="RangeModelsUI[1]" />
 			</div>
-			<!-- Right column (Fanfic) -->
-			<div class="flex-fill d-flex align-items-center mb-1">
-				<Checkbox Model="TypeTagsUI[1]" />
+			<div class="mb-1">
+				<InputRange Model="RangeModelsUI[2]" />
 			</div>
 		</div>
-	</div>
-	<div class="p-1 ps-2 pe-2"> @* 5th part *@
-		<label class="fw-semibold mb-2">Status</label>
-		<div class="d-flex gap-3">
-			<!-- Left column: 3 checkboxes -->
-			<div class="flex-fill d-flex flex-column">
-				@for(int i = 0; i < 3; i++)
-				{
-					<div class="d-flex align-items-center mb-1">
-						<Checkbox Model="StatusTagsUI[i]" />
-					</div>
-				}
-			</div>
-			<!-- Right column: 2 checkboxes -->
-			<div class="flex-fill d-flex flex-column">
-				@for(int i = 3; i < StatusTagsUI.Count; i++)
-				{
-					<div class="d-flex align-items-center mb-1">
-						<Checkbox Model="StatusTagsUI[i]" />
-					</div>
-				}
+		<div class="p-1 ps-2 pe-2">
+			@* 3rd part *@
+			<label class="fw-semibold mb-2">Sources</label>
+			@foreach (var sourceUI in SourcesUI)
+			{
+				<div class="d-flex align-items-center mb-1">
+					<Checkbox Model="sourceUI" />
+				</div>
+			}
+		</div>
+		<div class="p-1 ps-2 pe-2">
+			@* 4th part *@
+			<label class="fw-semibold mb-2">Type</label>
+			<div class="d-flex gap-3">
+				<!-- Left column (Original) -->
+				<div class="flex-fill d-flex align-items-center mb-1">
+					<Checkbox Model="TypeTagsUI[0]" />
+				</div>
+				<!-- Right column (Fanfic) -->
+				<div class="flex-fill d-flex align-items-center mb-1">
+					<Checkbox Model="TypeTagsUI[1]" />
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="p-1 ps-2 pe-2 mt-1"> @* 6th part *@
-		<div class="d-flex align-items-center justify-content-between">
-			<button class="litexp-btn litexp-btn-ps btn-fp" @onclick="ResetFiltersAsync">Reset</button>
-			<button class="litexp-btn litexp-btn-p btn-fp" @onclick="ApplyFilterAsync">Apply</button>
+		<div class="p-1 ps-2 pe-2">
+			@* 5th part *@
+			<label class="fw-semibold mb-2">Status</label>
+			<div class="d-flex gap-3">
+				<!-- Left column: 3 checkboxes -->
+				<div class="flex-fill d-flex flex-column">
+					@for (int i = 0; i < 3; i++)
+					{
+						<div class="d-flex align-items-center mb-1">
+							<Checkbox Model="StatusTagsUI[i]" />
+						</div>
+					}
+				</div>
+				<!-- Right column: 2 checkboxes -->
+				<div class="flex-fill d-flex flex-column">
+					@for (int i = 3; i < StatusTagsUI.Count; i++)
+					{
+						<div class="d-flex align-items-center mb-1">
+							<Checkbox Model="StatusTagsUI[i]" />
+						</div>
+					}
+				</div>
+			</div>
 		</div>
-	</div>
+		<div class="p-1 ps-2 pe-2 mt-1">
+			@* 6th part *@
+			<div class="d-flex align-items-center justify-content-between">
+				<button class="litexp-btn litexp-btn-ps btn-fp" @onclick="ResetFiltersAsync">Reset</button>
+				<button class="litexp-btn litexp-btn-p btn-fp" @onclick="ApplyFilterAsync">Apply</button>
+			</div>
+		</div>
+	}
+	else
+	{
+		<TagsPanel TagsCategory="SelectedTagsCategory" TagsUI="TagsUI" OnReturn="ReturnToFilterPanel" />
+	}
 </div>
 
 @code{
@@ -91,8 +104,11 @@
 	private List<InputRangeModel> RangeModelsUI { get; set; } = null!;
 
 	private List<CheckboxModel> SourcesUI { get; set; } = null!;
+	private List<CheckboxModel> TagsUI { get; set; } = null!;
 	private List<CheckboxModel> TypeTagsUI { get; set; } = null!;
 	private List<CheckboxModel> StatusTagsUI { get; set; } = null!;
+
+	private TagsCategoryDTO? SelectedTagsCategory { get; set; } = null;
 
 	protected override void OnInitialized()
 	{
@@ -106,21 +122,29 @@
 			Value = s.SourceId
 		}).ToList();
 
-		TypeTagsUI = TagsCategories.Where(tc => tc.CategoryId == 6).SelectMany(tc => tc.Tags).Select(t => new CheckboxModel()
+		TagsUI = SortedTagsCategories.SelectMany(tc => tc.Tags.Select(t => new CheckboxModel()
 		{
 			IsSelected = false,
 			Name = t.TagName,
-			Group = "typeTags",
+			Group = $"{tc.CategoryName}Tags",
 			Value = t.TagId
-		}).ToList();
+		})).ToList();
 
-		StatusTagsUI = TagsCategories.Where(tc => tc.CategoryId == 7).SelectMany(tc => tc.Tags).Select(t => new CheckboxModel()
+		TypeTagsUI = TagsCategories.Where(tc => tc.CategoryId == 6).SelectMany(tc => tc.Tags.Select(t => new CheckboxModel()
 		{
 			IsSelected = false,
 			Name = t.TagName,
-			Group = "statusTags",
+			Group = $"{tc.CategoryName}Tags",
 			Value = t.TagId
-		}).ToList();
+		})).ToList();
+
+		StatusTagsUI = TagsCategories.Where(tc => tc.CategoryId == 7).SelectMany(tc => tc.Tags.Select(t => new CheckboxModel()
+		{
+			IsSelected = false,
+			Name = t.TagName,
+			Group = $"{tc.CategoryName}Tags",
+			Value = t.TagId
+		})).ToList();
 
 		RangeModelsUI = new List<InputRangeModel>()
 		{
@@ -157,6 +181,7 @@
 
 		// type and status tags
 		Filter.Tags!.Clear();
+		Filter.Tags!.AddRange(TagsUI.Where(t => t.IsSelected).Select(t => t.Value));
 		Filter.Tags!.AddRange(TypeTagsUI.Where(t => t.IsSelected).Select(t => t.Value));
 		Filter.Tags!.AddRange(StatusTagsUI.Where(t => t.IsSelected).Select(t => t.Value));
 
@@ -174,9 +199,13 @@
 		});
 
 		SourcesUI.ForEach(s => s.IsSelected = false);
+		TagsUI.ForEach(t => t.IsSelected = false);
 		TypeTagsUI.ForEach(t => t.IsSelected = false);
 		StatusTagsUI.ForEach(t => t.IsSelected = false);
 
 		await ApplyFilterAsync();
 	}
+
+	private void ReturnToFilterPanel()
+		=> SelectedTagsCategory = null;
 }
