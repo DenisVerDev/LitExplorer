@@ -68,12 +68,18 @@
 	<div class="p-1 ps-2 pe-2 mt-1"> @* 6th part *@
 		<div class="d-flex align-items-center justify-content-between">
 			<button class="litexp-btn litexp-btn-ps btn-fp">Reset</button>
-			<button class="litexp-btn litexp-btn-p btn-fp">Apply</button>
+			<button class="litexp-btn litexp-btn-p btn-fp" @onclick="ApplyFilterAsync">Apply</button>
 		</div>
 	</div>
 </div>
 
 @code{
+	[Parameter]
+	public BrowseFilterDTO Filter { get; set; } = null!;
+
+	[Parameter]
+	public EventCallback OnApplyFilter { get; set; }
+
 	[Parameter]
 	public List<SourceDTO> Sources { get; set; } = null!;
 
@@ -136,5 +142,24 @@
 				MaxLimit = DateTime.Now.Year
 			}
 		};
+	}
+
+	private async Task ApplyFilterAsync()
+	{
+		// ranges
+		Filter.AverageRatingRange = new KeyValuePair<double?, double?>(RangeModelsUI[0].MinValue, RangeModelsUI[0].MaxValue);
+		Filter.ChaptersCountRange = new KeyValuePair<int?, int?>((int?)RangeModelsUI[1].MinValue, (int?)RangeModelsUI[1].MaxValue);
+		Filter.ActivityYearRange = new KeyValuePair<int?, int?>((int?)RangeModelsUI[2].MinValue, (int?)RangeModelsUI[2].MaxValue);
+
+		// sources
+		Filter.Sources!.Clear();
+		Filter.Sources!.AddRange(SourcesUI.Where(s => s.IsSelected).Select(s => s.Value));
+
+		// type and status tags
+		Filter.Tags!.Clear();
+		Filter.Tags!.AddRange(TypeTagsUI.Where(t => t.IsSelected).Select(t => t.Value));
+		Filter.Tags!.AddRange(StatusTagsUI.Where(t => t.IsSelected).Select(t => t.Value));
+
+		await OnApplyFilter.InvokeAsync();
 	}
 }

@@ -19,9 +19,9 @@
 					foreach (var book in Books)
 					{
 						<BookRow Book="book"
-								 Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
-								 TagsCategories="TagsCategories"
-								 Sources="Sources" />
+						Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
+						TagsCategories="TagsCategories"
+						Sources="Sources" />
 					}
 				}
 				else
@@ -34,7 +34,9 @@
 			@if (TagsCategories != null && TagsCategories.Count > 0)
 			{
 				<FilterPanel Sources="Sources"
-							 TagsCategories="TagsCategories" />
+				TagsCategories="TagsCategories"
+				Filter="Filter"
+				OnApplyFilter="OnApplyFilterAsync"/>
 			}
 		</div>
 	</div>
@@ -43,7 +45,6 @@
 @code{
 	private const int maxBooks = 12;
 
-	private BrowseFilterDTO Filter { get; set; } = new BrowseFilterDTO();
 	private int Page { get; set; } = 0;
 
 	private List<BookDTO>? Books { get; set; } = null;
@@ -51,12 +52,37 @@
 	private List<TagsCategoryDTO>? TagsCategories { get; set; } = null;
 	private List<SourceDTO>? Sources { get; set; } = null;
 
+	private BrowseFilterDTO Filter { get; set; } = null!;
+
 	protected override async Task OnInitializedAsync()
+	{
+		Filter = new BrowseFilterDTO()
+		{
+			Tags = new List<int>(),
+			Sources = new List<int>()
+		};
+
+		await LoadBooksAsync();
+		await LoadMetadataAsync();
+	}
+
+	private async Task OnApplyFilterAsync()
+	{
+		Books?.Clear();
+		Authors?.Clear();
+
+		await LoadBooksAsync();
+	}
+
+	private async Task LoadBooksAsync()
 	{
 		var browseResponse = await BrowseService.BrowseBooksAsync(Filter, Page, maxBooks);
 		Books = browseResponse?.Books;
 		Authors = browseResponse?.Authors;
+	}
 
+	private async Task LoadMetadataAsync()
+	{
 		var tagsCategoriesResponse = await MetadataService.GetTagsCategoriesAsync(true);
 		TagsCategories = tagsCategoriesResponse?.OrderByDescending(tc => tc.CategoryId).ToList();
 
