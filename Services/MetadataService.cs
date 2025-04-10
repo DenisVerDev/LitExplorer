@@ -81,5 +81,29 @@ namespace LitExplorer.Services
                 return null;
             }
         }
+
+        public async Task<int> GetPagesCountAsync()
+        {
+            try
+            {
+                string sourcesUrl = ApiUrl + $"Metadata/pages";
+
+                var response = await HttpClient.GetAsync(sourcesUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<int>
+                        (
+                            jsonResponse,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                        );
+                }
+                else throw new Exception("Failed to receive successful response!");
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 }
