@@ -82,13 +82,13 @@ namespace LitExplorer.Services
             }
         }
 
-        public async Task<int> GetPagesCountAsync()
+        public async Task<int> GetPagesCountAsync(int pageSize)
         {
             try
             {
-                string sourcesUrl = ApiUrl + $"Metadata/pages";
+                string pagesUrl = ApiUrl + $"Metadata/pages?pageSize={pageSize}";
 
-                var response = await HttpClient.GetAsync(sourcesUrl);
+                var response = await HttpClient.GetAsync(pagesUrl);
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
