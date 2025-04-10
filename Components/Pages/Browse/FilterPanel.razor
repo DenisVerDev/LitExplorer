@@ -91,7 +91,7 @@
 	public BrowseFilterDTO Filter { get; set; } = null!;
 
 	[Parameter]
-	public EventCallback OnApplyFilter { get; set; }
+	public EventCallback<bool> OnApplyFilter { get; set; }
 
 	[Parameter]
 	public List<SourceDTO> Sources { get; set; } = null!;
@@ -185,7 +185,7 @@
 		Filter.Tags!.AddRange(TypeTagsUI.Where(t => t.IsSelected).Select(t => t.Value));
 		Filter.Tags!.AddRange(StatusTagsUI.Where(t => t.IsSelected).Select(t => t.Value));
 
-		await OnApplyFilter.InvokeAsync();
+		await OnApplyFilter.InvokeAsync(true); // yes, every action with FilterPanel will result in pagination reset
 	}
 
 	private async Task ResetFiltersAsync()

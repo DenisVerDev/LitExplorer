@@ -15,7 +15,7 @@
 					name="sortByOption"
 					class="litexp-radio"
 					checked="@(Filter.SortByOption == option)"
-					@onchange="async () =>{ Filter.SortByOption = option; await OnApplyFilter.InvokeAsync();}" />
+					@onchange="async () =>{ Filter.SortByOption = option; await OnSortByChange.InvokeAsync(true);}" />
 					<label for="@($"option_{option}")" class="litexp-radio-label">
 						<span class="radio-checkmark"></span>
 						@ToLabelCase(option.ToString())
@@ -33,7 +33,7 @@
 					name="sortByType"
 					class="litexp-radio"
 					checked="@(Filter.SortByType == type)"
-					@onchange="async () =>{ Filter.SortByType = type; await OnApplyFilter.InvokeAsync();}" />
+					@onchange="async () =>{ Filter.SortByType = type; await OnSortByChange.InvokeAsync(true);}" />
 					<label for="@($"type_{type}")" class="litexp-radio-label">
 						<span class="radio-checkmark"></span>
 						@type.ToString()
@@ -49,7 +49,7 @@
 	public BrowseFilterDTO Filter { get; set; } = new BrowseFilterDTO();
 
 	[Parameter]
-	public EventCallback OnApplyFilter { get; set; }
+	public EventCallback<bool> OnSortByChange { get; set; }
 
 	[Parameter]
 	public SortByPanelState TargetedState { get; set; }

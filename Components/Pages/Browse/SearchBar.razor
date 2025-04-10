@@ -24,8 +24,8 @@
     public BrowseFilterDTO Filter { get; set; } = null!;
 
     [Parameter]
-    public EventCallback OnSeachByTitle { get; set; }
+    public EventCallback<bool> OnSeachByTitle { get; set; }
 
     private async Task SearchByTitleAsync()
-    => await OnSeachByTitle.InvokeAsync();
+    => await OnSeachByTitle.InvokeAsync(true); // reseting pagination on search
 }

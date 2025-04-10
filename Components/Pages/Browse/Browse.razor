@@ -37,7 +37,7 @@
 							</svg>
 						</button>
 						<SortByPanel Filter="@Filter" TargetedState="SortByPanelState.ShowSortByOptions" CurrentState="SortByPanelState"
-						OnApplyFilter="OnApplyFilterAsync" />
+						OnSortByChange="OnApplyFilterAsync" />
 					</div>
 					<!-- Sort Type Container -->
 					<div class="position-relative d-inline-block">
@@ -53,7 +53,7 @@
 							</svg>
 						</button>
 						<SortByPanel Filter="@Filter" TargetedState="SortByPanelState.ShowSortByType" CurrentState="SortByPanelState"
-						OnApplyFilter="OnApplyFilterAsync" />
+						OnSortByChange="OnApplyFilterAsync" />
 					</div>
 				</div>
 			</div>
@@ -76,6 +76,9 @@
 
 				}
 			</div>
+			<div class="row w-100 m-0 mt-3">
+				<Pagination Model="PaginationModel" OnPageChanged="OnApplyFilterAsync" />
+			</div>
 		</div>
 		<div class="col-12 col-md-3 order-1 order-md-2 mb-3 mt-3 mt-md-0">
 			@if (TagsCategories != null && TagsCategories.Count > 0)
@@ -90,10 +93,6 @@
 </div>
 
 @code{
-	private const int maxBooks = 12;
-
-	private int Page { get; set; } = 0;
-
 	private List<BookDTO>? Books { get; set; } = null;
 	private List<AuthorDTO>? Authors { get; set; } = null;
 	private List<TagsCategoryDTO>? TagsCategories { get; set; } = null;
@@ -103,6 +102,8 @@
 
 	private SortByPanelState SortByPanelState { get; set; } = SortByPanelState.Hidden;
 
+	private PaginationModel PaginationModel { get; set; } = null!;
+
 	protected override async Task OnInitializedAsync()
 	{
 		Filter = new BrowseFilterDTO()
@@ -111,15 +112,24 @@
 			Sources = new List<int>()
 		};
 
+		PaginationModel = new PaginationModel() { PageSize = 12 };
+
 		await LoadBooksAsync();
+		await LoadPagesAsync();
 		await LoadMetadataAsync();
 	}
 
 	private async Task LoadBooksAsync()
 	{
-		var browseResponse = await BrowseService.BrowseBooksAsync(Filter, Page, maxBooks);
+		var browseResponse = await BrowseService.BrowseBooksAsync(Filter, PaginationModel.CurrentPage, PaginationModel.PageSize);
 		Books = browseResponse?.Books;
 		Authors = browseResponse?.Authors;
+	}
+
+	private async Task LoadPagesAsync()
+	{
+		PaginationModel.TotalPages = await BrowseService.GetPagesCountAsync(Filter, PaginationModel.PageSize);
+		PaginationModel.CurrentPage = 0;
 	}
 
 	private async Task LoadMetadataAsync()
@@ -130,12 +140,15 @@
 		Sources = await MetadataService.GetSourcesAsync();
 	}
 
-	private async Task OnApplyFilterAsync()
+	private async Task OnApplyFilterAsync(bool resetPagination)
 	{
 		Books?.Clear();
 		Authors?.Clear();
 
 		SortByPanelState = SortByPanelState.Hidden; // ui fix
+
+		if (resetPagination)
+			await LoadPagesAsync();
 
 		await LoadBooksAsync();
 	}
@@ -145,6 +158,6 @@
 		Filter.SortByOption = SortByOptions.ByPopularity;
 		Filter.SortByType = SortByType.DESC;
 
-		await OnApplyFilterAsync();
+		await OnApplyFilterAsync(true);
 	}
 }
