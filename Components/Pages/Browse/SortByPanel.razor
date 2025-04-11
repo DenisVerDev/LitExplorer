@@ -1,0 +1,76 @@
+﻿@using System.Text.RegularExpressions;
+@inject IJSRuntime JS
+
+@if(CurrentState == TargetedState)
+{
+	<div class="sort-by-panel" id="sortByPanel" tabindex="0" @onfocusout="()=>CurrentState=SortByPanelState.Hidden">
+		@if (TargetedState == SortByPanelState.ShowSortByOptions)
+		{
+			@foreach (SortByOptions option in Enum.GetValues(typeof(SortByOptions)))
+			{
+				<div class="sort-by-item">
+					<!-- The radio input is hidden so we can style it with a custom label -->
+					<input type="radio"
+					id="@($"option_{option}")"
+					name="sortByOption"
+					class="litexp-radio"
+					checked="@(Filter.SortByOption == option)"
+					@onchange="async () =>{ Filter.SortByOption = option; await OnSortByChange.InvokeAsync(true);}" />
+					<label for="@($"option_{option}")" class="litexp-radio-label">
+						<span class="radio-checkmark"></span>
+						@ToLabelCase(option.ToString())
+					</label>
+				</div>
+			}
+		}
+		else if (TargetedState == SortByPanelState.ShowSortByType)
+		{
+			@foreach (SortByType type in Enum.GetValues(typeof(SortByType)))
+			{
+				<div class="sort-by-item">
+					<input type="radio"
+					id="@($"type_{type}")"
+					name="sortByType"
+					class="litexp-radio"
+					checked="@(Filter.SortByType == type)"
+					@onchange="async () =>{ Filter.SortByType = type; await OnSortByChange.InvokeAsync(true);}" />
+					<label for="@($"type_{type}")" class="litexp-radio-label">
+						<span class="radio-checkmark"></span>
+						@type.ToString()
+					</label>
+				</div>
+			}
+		}
+	</div>
+}
+
+@code {
+	[Parameter]
+	public BrowseFilterDTO Filter { get; set; } = new BrowseFilterDTO();
+
+	[Parameter]
+	public EventCallback<bool> OnSortByChange { get; set; }
+
+	[Parameter]
+	public SortByPanelState TargetedState { get; set; }
+
+	[Parameter]
+	public SortByPanelState CurrentState { get; set; }
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (CurrentState != SortByPanelState.Hidden)
+			await JS.InvokeVoidAsync("focusElementRef", "sortByPanel");
+	}
+
+	private string ToLabelCase(string input)
+	{
+		if (string.IsNullOrEmpty(input))
+			return input;
+
+		string spaced = Regex.Replace(input, "(?!^)([A-Z])", " $1");
+		spaced = spaced.ToLower();
+
+		return char.ToUpper(spaced[0]) + spaced.Substring(1);
+	}
+}

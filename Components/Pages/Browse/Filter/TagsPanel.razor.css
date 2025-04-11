@@ -1,0 +1,8 @@
+﻿.btn-back{
+    cursor:pointer;
+    transition: color 0.2s ease;
+}
+
+.btn-back:hover{
+    color: var(--primary-subtle-color)
+}
