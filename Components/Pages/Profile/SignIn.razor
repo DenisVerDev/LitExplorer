@@ -1,13 +1,27 @@
 ﻿@page "/SignIn"
+@layout LitExplorer.Components.Layout.BareLayout
 @inject UserService UserService
 @inject NavigationManager NavigationManager
 
 <PageTitle>Sign in</PageTitle>
 
-<div class="container min-vh-100 p-0 d-flex align-items-center justify-content-center">
+<div class="container p-0 vh-100 d-flex align-items-center justify-content-center">
 	<div class="row w-100 m-0 justify-content-center">
-		<div class="col-12 col-md-3 p-4 centered-col shadow-sm rounded-1">
-			<h2 class="text-center mb-5">Sign In</h2>
+		<div class="col-12 col-md-3 p-4 centered-col shadow-sm rounded-2">
+			<div class="d-flex align-items-center position-relative mb-5">
+				<svg xmlns="http://www.w3.org/2000/svg"
+					 class="btn-back position-absolute"
+					 viewBox="0 0 24 24"
+					 aria-hidden="true"
+					 focusable="false"
+					 width="1.5em"
+					 height="1.5em"
+					 fill="none"
+					 @onclick="@(()=>NavigationManager.NavigateTo("Browse"))">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
+				</svg>
+				<h2 class="mx-auto">Sign In</h2>
+			</div>
 			<div>
 				<input type="email" class="signin-input w-100 mb-3" placeholder="Enter your email" @bind="email"/>
 				<input type="password" class="signin-input w-100" placeholder="Enter your password" @bind="password"/>

@@ -13,9 +13,6 @@
 /*-----LIGHT THEME-----*/
 body{
     color: var(--text-color);
-}
-
-main{
     background-color: var(--bg-color);
 }
 

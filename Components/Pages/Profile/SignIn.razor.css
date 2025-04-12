@@ -23,7 +23,23 @@
     color: var(--text-subtle-color);
 }
 
+.btn-back{
+    cursor:pointer;
+    transition: color 0.2s ease;
+}
+
+.btn-back:hover{
+    color: var(--primary-subtle-color)
+}
+
 @media (max-width: 767.98px) {
-  .centered-col {
-    min-height: 100vh;
+    .container,
+    .row{
+        background-color: var(--container-bg-color) !important;
+    }
+
+    .centered-col{
+        box-shadow:none !important;
+        border:none;
+    }
 }
