@@ -13,9 +13,12 @@
 				<input type="password" class="signin-input w-100" placeholder="Enter your password" @bind="password"/>
 			</div>
 			<div class="mt-4">
-				<button class="litexp-btn litexp-btn-p w-100 mb-2" @onclick="SignInAsync">Sign in</button>
-				<button class="litexp-btn litexp-btn-ps w-100">Sign up</button>
+				<button type="button" class="litexp-btn litexp-btn-p w-100 mb-2" @onclick="SignInAsync">Sign in</button>
+				<button type="button" class="litexp-btn litexp-btn-ps w-100">Sign up</button>
 			</div>
+			<Modal IsVisible="modalVisibility" Title="Sign in failure!" OnModalClosed="()=>modalVisibility = false">
+				<h6>Something went wrong</h6>
+			</Modal>
 		</div>
 	</div>
 </div>
@@ -24,10 +27,13 @@
 	private string email = string.Empty;
 	private string password = string.Empty;
 
+	private bool modalVisibility = false;
+
 	private async Task SignInAsync()
 	{
 		var user = await UserService.SignInAsync(email, password);
 		if (user != null)
 			NavigationManager.NavigateTo("Browse");
+		else modalVisibility = true;
 	}
 }
