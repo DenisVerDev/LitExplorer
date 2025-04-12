@@ -1,0 +1,33 @@
+﻿@page "/SignIn"
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+
+<PageTitle>Sign in</PageTitle>
+
+<div class="container min-vh-100 p-0 d-flex align-items-center justify-content-center">
+	<div class="row w-100 m-0 justify-content-center">
+		<div class="col-12 col-md-3 p-4 centered-col shadow-sm rounded-1">
+			<h2 class="text-center mb-5">Sign In</h2>
+			<div>
+				<input type="email" class="signin-input w-100 mb-3" placeholder="Enter your email" @bind="email"/>
+				<input type="password" class="signin-input w-100" placeholder="Enter your password" @bind="password"/>
+			</div>
+			<div class="mt-4">
+				<button class="litexp-btn litexp-btn-p w-100 mb-2" @onclick="SignInAsync">Sign in</button>
+				<button class="litexp-btn litexp-btn-ps w-100">Sign up</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+@code{
+	private string email = string.Empty;
+	private string password = string.Empty;
+
+	private async Task SignInAsync()
+	{
+		var user = await UserService.SignInAsync(email, password);
+		if (user != null)
+			NavigationManager.NavigateTo("Browse");
+	}
+}

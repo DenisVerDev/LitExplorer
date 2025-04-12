@@ -1,0 +1,29 @@
+﻿.centered-col{
+    background-color: var(--container-bg-color);
+}
+
+.signin-input{
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    transition: border-color 0.2s ease;
+}
+
+.signin-input:hover,
+.signin-input:focus {
+    border-color: var(--primary-subtle-color);
+    outline:none;
+}
+
+.signin-input::placeholder{
+    color: var(--text-subtle-color);
+}
+
+@media (max-width: 767.98px) {
+  .centered-col {
+    min-height: 100vh;
+}
