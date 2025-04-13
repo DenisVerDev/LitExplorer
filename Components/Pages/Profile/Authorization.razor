@@ -23,8 +23,8 @@
 				<h2 class="mx-auto">@(IsNew ? "Sign up" : "Sign in")</h2>
 			</div>
 			<div class="mb-4">
-				<input type="email" class="signin-input w-100 mb-3" placeholder="Enter your email" @bind="email"/>
-				<input type="password" class="signin-input w-100 mb-3" placeholder="Enter your password" @bind="password"/>
+				<input type="email" class="signin-input w-100 mb-3" placeholder="Enter your email" @bind="email" />
+				<input type="password" class="signin-input w-100 mb-3" placeholder="Enter your password" @bind="password" />
 				@if (IsNew)
 				{
 					<input type="password" class="signin-input w-100" placeholder="Confirm your password" @bind="confirmationPassword" />
@@ -34,7 +34,7 @@
 				<button type="button" class="litexp-btn litexp-btn-p w-100 mb-2" @onclick="AuthorizeAsync">
 					@(IsNew ? "Sign up" : "Sign in")
 				</button>
-				@if(!IsNew)
+				@if (!IsNew)
 				{
 					<button type="button" class="litexp-btn litexp-btn-ps w-100" @onclick="()=>IsNew=true">Sign up</button>
 				}
@@ -47,8 +47,7 @@
 </div>
 
 @code{
-	[SupplyParameterFromQuery(Name = "new")]
-	private bool IsNew { get; set; } = false; // its just a starting point, no unnecessary shinennigans
+	private bool IsNew { get; set; } = false;
 
 	private string email = string.Empty;
 	private string password = string.Empty;
@@ -56,11 +55,25 @@
 
 	private bool modalVisibility = false;
 
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if(firstRender)
+		{
+			await UserService.LoadSessionUserAsync();
+
+			if (UserService.SessionUser != null)
+				NavigationManager.NavigateTo("Browse");
+		}
+	}
+
 	private async Task AuthorizeAsync()
 	{
-		var user = IsNew ? await UserService.SignUpAsync(email, password) : await UserService.SignInAsync(email, password);
-		if(user != null)
+		UserService.SessionUser = IsNew ? await UserService.SignUpAsync(email, password) : await UserService.SignInAsync(email, password);
+		if (UserService.SessionUser != null)
+		{
+			await UserService.SaveSessionUserAsync();
 			NavigationManager.NavigateTo("Browse");
+		}
 		else modalVisibility = true;
 	}
 
