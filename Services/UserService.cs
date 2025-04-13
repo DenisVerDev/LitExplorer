@@ -2,14 +2,23 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text.Json;
 using System.Text;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace LitExplorer.Services
 {
     public class UserService : HttpService
     {
-        public UserService(IHttpClientFactory httpClientFactory, IConfiguration configuration) 
+        public const string userKey = "sessionUser";
+
+        public UserDTO? SessionUser { get; set; } = null;
+
+        private ProtectedLocalStorage pls = null!;
+
+        public UserService(IHttpClientFactory httpClientFactory, IConfiguration configuration, ProtectedLocalStorage protectedLocalStorage) 
             : base(httpClientFactory, configuration)
-        {}
+        {
+            pls = protectedLocalStorage;
+        }
 
         public async Task<UserDTO?> SignUpAsync(string email, string password)
         {
@@ -63,6 +72,24 @@ namespace LitExplorer.Services
             {
                 return null;
             }
+        }
+
+        public async Task LoadSessionUserAsync()
+        {
+            var result = await pls.GetAsync<UserDTO>(userKey);
+            SessionUser = result.Success ? result.Value : null;
+        }
+
+        public async Task SaveSessionUserAsync()
+        {
+            if (SessionUser != null) await pls.SetAsync(userKey, SessionUser);
+            else await DeleteSessionUserAsync();
+        }
+
+        public async Task DeleteSessionUserAsync()
+        {
+            SessionUser = null;
+            await pls.DeleteAsync(userKey);
         }
     }
 }
