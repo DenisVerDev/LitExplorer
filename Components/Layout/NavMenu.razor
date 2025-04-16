@@ -1,5 +1,6 @@
 ﻿@inject NavigationManager NavManager
 @inject StorageService Storage
+@inject IJSRuntime JS
 
 <nav class="navbar navbar-expand-sm shadow-sm p-md-2 p-3">
 	<div class="container">
@@ -34,9 +35,18 @@
 						@(IsDarkTheme ? "🌙" : "🌞")
 					</span>
 				</button>
-				<a class="nav-link me-4" @onclick="ProfileNavigation">
-					@(SessionUser == null ? "Sign in" : SessionUser.Email)
-				</a>
+				<div class="position-relative">
+					<a class="nav-link me-4" @onclick="ProfileNavigation">
+						@(SessionUser == null ? "Sign in" : "Profile")
+					</a>
+					@if(SessionUser != null && showProfileDropDown)
+					{
+						<div class="profile-dropdown" id="profileDropDown" tabindex="0" @onfocusout="HandleProfileFocus">
+							<div class="profile-email" title="@SessionUser.Email">@SessionUser.Email</div>
+							<button class="btn-signout" @onmousedown="()=>signoutFocus=true" @onmouseleave="()=>signoutFocus=false" @onclick="SignOutAsync">Sign out</button>
+						</div>
+					}
+				</div>
 
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
 				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,15 +67,35 @@
 	private const string userKey = "sessionUser";
 	private UserDTO? SessionUser { get; set; } = null;
 
+	private bool showProfileDropDown = false;
+	private bool signoutFocus = false;
+
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if(firstRender)
 			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
+
+		if (showProfileDropDown)
+			await JS.InvokeVoidAsync("focusElementRef", "profileDropDown");
 	}
 
 	private void ProfileNavigation()
 	{
 		if (SessionUser == null)
 			NavManager.NavigateTo("Authorization");
+		else showProfileDropDown = !showProfileDropDown;
+	}
+
+	private async Task SignOutAsync()
+	{
+		SessionUser = null;
+		await Storage.DeleteValueAsync(userKey);
+		NavManager.NavigateTo("Browse");
+	}
+
+	private void HandleProfileFocus(FocusEventArgs args)
+	{
+		if (!signoutFocus)
+			showProfileDropDown = false;
 	}
 }
