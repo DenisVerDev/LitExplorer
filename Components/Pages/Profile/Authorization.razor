@@ -1,6 +1,7 @@
 ﻿@page "/Authorization"
 @layout LitExplorer.Components.Layout.BareLayout
 @inject UserService UserService
+@inject StorageService Storage
 @inject NavigationManager NavigationManager
 
 <PageTitle>@(IsNew ? "Sign up" : "Sign in")</PageTitle>
@@ -47,6 +48,10 @@
 </div>
 
 @code{
+	private const string userKey = "sessionUser";
+
+	private UserDTO? SessionUser { get; set; } = null;
+
 	private bool IsNew { get; set; } = false;
 
 	private string email = string.Empty;
@@ -59,19 +64,18 @@
 	{
 		if(firstRender)
 		{
-			await UserService.LoadSessionUserAsync();
-
-			if (UserService.SessionUser != null)
+			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
+			if(SessionUser != null)
 				NavigationManager.NavigateTo("Browse");
 		}
 	}
 
 	private async Task AuthorizeAsync()
 	{
-		UserService.SessionUser = IsNew ? await UserService.SignUpAsync(email, password) : await UserService.SignInAsync(email, password);
-		if (UserService.SessionUser != null)
+		SessionUser = IsNew ? await UserService.SignUpAsync(email, password) : await UserService.SignInAsync(email, password);
+		if (SessionUser != null)
 		{
-			await UserService.SaveSessionUserAsync();
+			await Storage.SaveValueAsync(userKey, SessionUser);
 			NavigationManager.NavigateTo("Browse");
 		}
 		else modalVisibility = true;

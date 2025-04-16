@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-@inject ProtectedLocalStorage ProtectedLocalStorage
+@inject StorageService Storage
 @inject IJSRuntime JS
 
 <header>
@@ -10,15 +10,15 @@
 </main>
 
 @code{
+	private const string themeKey = "isDarkTheme";
 	private bool isDarkTheme = false; // light theme by default
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (firstRender)
 		{
-			var result = await ProtectedLocalStorage.GetAsync<bool>("isDarkTheme");
-			if (result.Success)
-				isDarkTheme = result.Value;
+			var theme = await Storage.GetValueAsync<bool>(themeKey);
+			isDarkTheme = theme != null ? (bool)theme : false;
 
 			await ApplyThemeAsync();
 		}
@@ -33,7 +33,7 @@
 	private async Task ToggleThemeAsync()
 	{
 		isDarkTheme = !isDarkTheme;
-		await ProtectedLocalStorage.SetAsync("isDarkTheme", isDarkTheme);
+		await Storage.SaveValueAsync(themeKey, isDarkTheme);
 		await ApplyThemeAsync();
 	}
 }

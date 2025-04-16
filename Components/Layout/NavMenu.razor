@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager NavManager
-@inject UserService UserService
+@inject StorageService Storage
 
 <nav class="navbar navbar-expand-sm shadow-sm p-md-2 p-3">
 	<div class="container">
@@ -35,7 +35,7 @@
 					</span>
 				</button>
 				<a class="nav-link me-4" @onclick="ProfileNavigation">
-					@(UserService.SessionUser == null ? "Sign in" : UserService.SessionUser.Email)
+					@(SessionUser == null ? "Sign in" : SessionUser.Email)
 				</a>
 
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -54,15 +54,18 @@
 	[Parameter]
 	public EventCallback OnToggleTheme { get; set; }
 
+	private const string userKey = "sessionUser";
+	private UserDTO? SessionUser { get; set; } = null;
+
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if(firstRender)
-			await UserService.LoadSessionUserAsync();
+			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
 	}
 
 	private void ProfileNavigation()
 	{
-		if (UserService.SessionUser == null)
+		if (SessionUser == null)
 			NavManager.NavigateTo("Authorization");
 	}
 }
