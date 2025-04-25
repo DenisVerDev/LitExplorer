@@ -1,0 +1,32 @@
+﻿
+<div class="modal-overlay @(IsVisible ? "visible" : "")" @onclick="CloseModal">
+    <div class="modal-container @(IsVisible ? "visible" : "")" @onclick:stopPropagation="true">
+        <div class="modal-header p-1 ps-2 pe-2 mb-2 d-flex align-items-center justify-content-between">
+            <h5 class="m-0" style="color:var(--secondary-color);">@Title</h5>
+            <button type="button" class="close-button" @onclick="CloseModal">×</button>
+        </div>
+        <div class="p-1 ps-2 pe-2">
+            @ChildContent
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public bool IsVisible { get; set; }
+
+    [Parameter]
+    public string Title { get; set; } = "Default title";
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback OnModalClosed { get; set; }
+
+    private async Task CloseModal()
+    {
+        IsVisible = false;
+        await OnModalClosed.InvokeAsync();
+    }
+}
