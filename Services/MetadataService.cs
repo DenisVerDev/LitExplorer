@@ -81,5 +81,29 @@ namespace LitExplorer.Services
                 return null;
             }
         }
+
+        public async Task<List<LibraryStatusDTO>?> GetLibraryStatusesAsync()
+        {
+            try
+            {
+                string libraryStatusesUrl = ApiUrl + $"Metadata/libraryStatuses";
+
+                var response = await HttpClient.GetAsync(libraryStatusesUrl);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<List<LibraryStatusDTO>>
+                        (
+                            jsonResponse,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                        ) ?? throw new Exception("Failed to deserialize received content!");
+                }
+                else throw new Exception("Failed to receive successful response!");
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }
