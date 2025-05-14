@@ -1,6 +1,7 @@
 ﻿@page "/Browse"
 @inject BrowseService BrowseService
 @inject MetadataService MetadataService
+@inject StorageService Storage
 
 <PageTitle>Browse literature</PageTitle>
 
@@ -69,7 +70,8 @@
 						Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
 						TagsCategories="TagsCategories"
 						Sources="Sources" 
-						LibraryStatuses="LibraryStatuses"/>
+						LibraryStatuses="LibraryStatuses"
+						SessionUser="SessionUser"/>
 					}
 				}
 				else
@@ -106,6 +108,9 @@
 
 	private PaginationModel PaginationModel { get; set; } = null!;
 
+	private const string userKey = "sessionUser";
+	private UserDTO? SessionUser { get; set; } = null;
+
 	protected override async Task OnInitializedAsync()
 	{
 		Filter = new BrowseFilterDTO()
@@ -119,6 +124,12 @@
 		await LoadBooksAsync();
 		await LoadPagesAsync();
 		await LoadMetadataAsync();
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (firstRender)
+			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
 	}
 
 	private async Task LoadBooksAsync()
