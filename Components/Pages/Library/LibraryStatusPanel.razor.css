@@ -1,0 +1,69 @@
+﻿.recom-panel {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
+    padding: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.recommendation-item {
+    display: flex;
+    align-items: center;
+    margin: 0.25rem 0;
+}
+
+.litexp-radio {
+    display: none;
+}
+
+.litexp-radio-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    user-select: none;
+}
+
+.radio-checkmark {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    margin-right: 8px;
+    position: relative;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.litexp-radio-label:hover .radio-checkmark {
+    border-color: var(--primary-subtle-color);
+}
+
+.litexp-radio:checked + .litexp-radio-label .radio-checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.radio-checkmark::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--text-contrast-color);
+    opacity: 0;
+    transform: translate(-50%, -50%);
+    transition: opacity 0.2s ease;
+}
+
+.litexp-radio:checked + .litexp-radio-label .radio-checkmark::after {
+    opacity: 1;
+}
+

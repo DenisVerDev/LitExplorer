@@ -11,11 +11,11 @@ namespace LitExplorer.Services
             : base(httpClientFactory, configuration)
         {}
 
-        public async Task<BrowseBookResponse?> InspectLibraryAsync(int userId, int page, int count)
+        public async Task<BrowseBookResponse?> InspectLibraryAsync(int userId, LibraryStatusOptions lOption, int page, int count)
         {
             try
             {
-                string browseUrl = $"{ApiUrl}Library?userId={userId}&page={page}&count={count}";
+                string browseUrl = $"{ApiUrl}Library?userId={userId}&lOption={lOption}&page={page}&count={count}";
 
                 var response = await HttpClient.GetAsync(browseUrl);
                 if (response.IsSuccessStatusCode)
