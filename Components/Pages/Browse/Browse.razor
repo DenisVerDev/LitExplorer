@@ -68,7 +68,8 @@
 						<BookRow Book="book"
 						Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
 						TagsCategories="TagsCategories"
-						Sources="Sources" />
+						Sources="Sources" 
+						LibraryStatuses="LibraryStatuses"/>
 					}
 				}
 				else
@@ -97,6 +98,7 @@
 	private List<AuthorDTO>? Authors { get; set; } = null;
 	private List<TagsCategoryDTO>? TagsCategories { get; set; } = null;
 	private List<SourceDTO>? Sources { get; set; } = null;
+	private List<LibraryStatusDTO>? LibraryStatuses = null;
 
 	private BrowseFilterDTO Filter { get; set; } = null!;
 
@@ -138,6 +140,8 @@
 		TagsCategories = tagsCategoriesResponse?.OrderByDescending(tc => tc.CategoryId).ToList();
 
 		Sources = await MetadataService.GetSourcesAsync();
+
+		LibraryStatuses = await MetadataService.GetLibraryStatusesAsync();
 	}
 
 	private async Task OnApplyFilterAsync(bool resetPagination)
