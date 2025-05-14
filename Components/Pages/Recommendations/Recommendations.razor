@@ -1,6 +1,7 @@
 ﻿@page "/Recommendations"
 @inject RecommendationService RecommendationService
 @inject MetadataService MetadataService
+@inject StorageService Storage
 
 <PageTitle>Recommendations</PageTitle>
 
@@ -65,7 +66,9 @@
 						<LitExplorer.Components.Pages.Browse.BookRow Book="book"
 						Authors="Authors.Where(a => book.BookSources.Any(bs=>bs.BookMeta.AuthorId == a.AuthorId)).ToList()"
 						TagsCategories="TagsCategories"
-						Sources="Sources" />
+						Sources="Sources" 
+						LibraryStatuses="LibraryStatuses"
+						SessionUser="SessionUser"/>
 					}
 				}
 				else
@@ -82,10 +85,26 @@
 	private List<AuthorDTO>? Authors { get; set; } = null;
 	private List<TagsCategoryDTO>? TagsCategories { get; set; } = null;
 	private List<SourceDTO>? Sources { get; set; } = null;
+	private List<LibraryStatusDTO>? LibraryStatuses { get; set; } = null;
 
 	private RecomTypePanelModel RecomTypePanelModel { get; set; } = null!;
 
+	private const string userKey = "sessionUser";
+	private UserDTO? SessionUser { get; set; } = null;
+
 	protected override async Task OnInitializedAsync()
+		=> await InitializeDataAsync();
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if(firstRender)
+		{
+			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
+			await InitializeDataAsync();
+		}
+	}
+
+	private async Task InitializeDataAsync()
 	{
 		RecomTypePanelModel = new RecomTypePanelModel();
 
@@ -95,7 +114,7 @@
 
 	private async Task LoadBooksAsync()
 	{
-		var browseResponse = await RecommendationService.RecommendBooksAsync(null, RecomTypePanelModel.RO, 12);
+		var browseResponse = await RecommendationService.RecommendBooksAsync(SessionUser, RecomTypePanelModel.RO, 12);
 		Books = browseResponse?.Books;
 		Authors = browseResponse?.Authors;
 	}
@@ -106,6 +125,8 @@
 		TagsCategories = tagsCategoriesResponse?.OrderByDescending(tc => tc.CategoryId).ToList();
 
 		Sources = await MetadataService.GetSourcesAsync();
+
+		LibraryStatuses = await MetadataService.GetLibraryStatusesAsync();
 	}
 
 	private async Task ApplyRecommendationOptionAsync()

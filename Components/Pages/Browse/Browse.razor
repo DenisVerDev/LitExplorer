@@ -100,7 +100,7 @@
 	private List<AuthorDTO>? Authors { get; set; } = null;
 	private List<TagsCategoryDTO>? TagsCategories { get; set; } = null;
 	private List<SourceDTO>? Sources { get; set; } = null;
-	private List<LibraryStatusDTO>? LibraryStatuses = null;
+	private List<LibraryStatusDTO>? LibraryStatuses { get; set; } = null;
 
 	private BrowseFilterDTO Filter { get; set; } = null!;
 
@@ -113,11 +113,25 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		Filter = new BrowseFilterDTO()
+		await InitializeDataAsync();
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if(firstRender)
 		{
-			Tags = new List<int>(),
-			Sources = new List<int>()
-		};
+			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
+			await InitializeDataAsync();
+		}
+	}
+
+	private async Task InitializeDataAsync()
+	{
+		Filter = new BrowseFilterDTO()
+			{
+				Tags = new List<int>(),
+				Sources = new List<int>()
+			};
 
 		PaginationModel = new PaginationModel() { PageSize = 12 };
 
@@ -126,15 +140,9 @@
 		await LoadMetadataAsync();
 	}
 
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if (firstRender)
-			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
-	}
-
 	private async Task LoadBooksAsync()
 	{
-		var browseResponse = await BrowseService.BrowseBooksAsync(Filter, PaginationModel.CurrentPage, PaginationModel.PageSize);
+		var browseResponse = await BrowseService.BrowseBooksAsync(Filter, PaginationModel.CurrentPage, PaginationModel.PageSize, SessionUser == null ? 0 : SessionUser.UserId);
 		Books = browseResponse?.Books;
 		Authors = browseResponse?.Authors;
 	}
