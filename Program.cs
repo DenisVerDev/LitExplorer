@@ -11,6 +11,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<MetadataService>();
 builder.Services.AddScoped<BrowseService>();
 builder.Services.AddScoped<RecommendationService>();
+builder.Services.AddScoped<LibraryService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<StorageService>();
 
