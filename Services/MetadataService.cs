@@ -81,29 +81,5 @@ namespace LitExplorer.Services
                 return null;
             }
         }
-
-        public async Task<int> GetPagesCountAsync(int pageSize)
-        {
-            try
-            {
-                string pagesUrl = ApiUrl + $"Metadata/pages?pageSize={pageSize}";
-
-                var response = await HttpClient.GetAsync(pagesUrl);
-                if (response.IsSuccessStatusCode)
-                {
-                    var jsonResponse = await response.Content.ReadAsStringAsync();
-                    return JsonSerializer.Deserialize<int>
-                        (
-                            jsonResponse,
-                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                        );
-                }
-                else throw new Exception("Failed to receive successful response!");
-            }
-            catch
-            {
-                return 0;
-            }
-        }
     }
 }

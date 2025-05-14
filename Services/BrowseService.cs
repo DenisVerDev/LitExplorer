@@ -37,6 +37,34 @@ namespace LitExplorer.Services
                 return null;
             }
         }
+
+        public async Task<int> GetPagesCountAsync(BrowseFilterDTO filter, int pageSize)
+        {
+            try
+            {
+                if (filter == null)
+                    throw new Exception("Received filter was null!");
+
+                string pagesUrl = $"{ApiUrl}Browse/pages?pageSize={pageSize}";
+                var jsonContent = new StringContent(JsonSerializer.Serialize(filter), Encoding.UTF8, "application/json");
+
+                var response = await HttpClient.PostAsync(pagesUrl, jsonContent);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    return JsonSerializer.Deserialize<int>
+                        (
+                            jsonResponse,
+                            new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+                        );
+                }
+                else throw new Exception("Failed to receive successful response!");
+            }
+            catch
+            {
+                return 0;
+            }
+        }
     }
 
     public class BrowseBookResponse
