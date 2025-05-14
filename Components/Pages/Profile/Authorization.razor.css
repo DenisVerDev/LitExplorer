@@ -1,0 +1,45 @@
+﻿.centered-col{
+    background-color: var(--container-bg-color);
+}
+
+.signin-input{
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    background-color: var(--container-bg-color);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    text-align: center;
+    transition: border-color 0.2s ease;
+}
+
+.signin-input:hover,
+.signin-input:focus {
+    border-color: var(--primary-subtle-color);
+    outline:none;
+}
+
+.signin-input::placeholder{
+    color: var(--text-subtle-color);
+}
+
+.btn-back{
+    cursor:pointer;
+    transition: color 0.2s ease;
+}
+
+.btn-back:hover{
+    color: var(--primary-subtle-color)
+}
+
+@media (max-width: 767.98px) {
+    .container,
+    .row{
+        background-color: var(--container-bg-color) !important;
+    }
+
+    .centered-col{
+        box-shadow:none !important;
+        border:none;
+    }
+}

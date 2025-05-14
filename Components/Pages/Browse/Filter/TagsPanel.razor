@@ -1,0 +1,35 @@
+﻿<div class="p-1 ps-2 pe-2">
+	<div class="d-flex align-items-center justify-content-between" @onclick="async ()=> await OnReturn.InvokeAsync()">
+		<label class="fw-semibold mb-2">@TagsCategory.CategoryName tags</label>
+		<svg xmlns="http://www.w3.org/2000/svg"
+		class="btn-back"
+		viewBox="0 0 24 24"
+		aria-hidden="true"
+		focusable="false"
+		width="1.5em"
+		height="1.5em"
+		fill="none">
+			<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
+		</svg>
+	</div>
+	@foreach (var tagUI in TagsUI)
+	{
+		if(TagsCategory.Tags.Select(t=>t.TagId).Contains(tagUI.Value))
+		{
+			<div class="d-flex align-items-center mb-1">
+				<Checkbox Model="tagUI" />
+			</div>
+		}
+	}
+</div>
+
+@code{
+	[Parameter]
+	public TagsCategoryDTO TagsCategory { get; set; } = null!;
+
+	[Parameter]
+	public List<CheckboxModel> TagsUI { get; set; } = null!;
+
+	[Parameter]
+	public EventCallback OnReturn { get; set; }
+}

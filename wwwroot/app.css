@@ -1,0 +1,137 @@
+:root{
+    --container-bg-color: #fff;
+    --bg-color: #f2f2f3;
+    --border-color: #ccc;
+    --primary-color: #228be6;
+    --primary-subtle-color: #3399ff;
+    --secondary-color: #dd7419;
+    --text-color: black;
+    --text-subtle-color: #888;
+    --text-contrast-color: white;
+}
+
+/*-----LIGHT THEME-----*/
+body{
+    color: var(--text-color);
+    background-color: var(--bg-color);
+}
+
+/*--checkbox--*/
+.litexp-checkbox{
+    display:none;
+}
+
+.litexp-checkbox-label{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    user-select: none;
+}
+
+.checkmark {
+    width: 16px;
+    height: 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin-right: 8px;
+    position: relative;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.litexp-checkbox-label:hover .checkmark {
+    border-color: var(--primary-subtle-color);
+}
+
+.litexp-checkbox:checked + .litexp-checkbox-label .checkmark {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.checkmark::after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 5px;
+    width: 4px;
+    height: 8px;
+    border: solid var(--text-contrast-color); /*???*/
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.litexp-checkbox:checked + .litexp-checkbox-label .checkmark::after {
+    opacity: 1;
+}
+
+/*--buttons--*/
+.litexp-btn{
+    padding: 0.3rem;  
+    font-size: 0.9rem;   
+    border-radius: 4px; 
+    text-align: center;       
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.litexp-btn-p{
+    background-color: var(--primary-color);
+    color: var(--text-contrast-color);
+}
+
+.litexp-btn-p:hover {
+    background-color: var(--primary-subtle-color);
+}
+
+.litexp-btn-ps{
+    background-color: var(--container-bg-color);
+    color: var(--text-color);
+}
+
+.litexp-btn-ps:hover {
+    background-color: var(--border-color);
+}
+
+/*--badges--*/
+.litexp-badge{
+    display: inline-block;
+    padding: 4px 10px;
+    text-align: center;
+    font-size: 0.75rem;
+    border-radius: 0.2rem;
+    background-color: var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+.litexp-badge-i{
+    cursor: pointer;
+}
+
+.litexp-badge-i:hover{
+    background-color: var(--bg-color);
+}
+
+.litexp-badge-p{
+    background-color: var(--primary-color);
+    color: var(--text-contrast-color);
+}
+
+.litexp-badge-pi{
+    cursor: pointer;
+}
+
+.litexp-badge-pi:hover{
+    background-color: var(--primary-subtle-color);
+}
+
+/*-----DARK THEME-----*/
+body.dark-theme {
+    --container-bg-color: #2e2e2e;
+    --bg-color: #1c1c1c;
+    --border-color: #555555;
+    --text-color: #f0f0f0;
+}
