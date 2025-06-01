@@ -1,7 +1,17 @@
-﻿<div class="row w-100 book-row p-3 d-flex align-items-start position-relative">
+﻿@inject LibraryService LibraryService
+
+<div class="row w-100 book-row p-3 d-flex align-items-start position-relative">
 	<div class="col-12 col-md-2 mb-2">
 		<img class="cover-img" src="@(SelectedBookSource.BookMeta.CoverImageUrl ?? "/images/default-cover.png")" alt="@Book.Title" />
 		<LitExplorer.Components.Pages.Browse.Filter.InputDropDown Model="SourcesModel" SelectedKeyChanged="ChangeSelectedBookSource"/>
+		@if(SessionUser != null)
+		{
+			<LitExplorer.Components.Pages.Browse.Filter.InputDropDown Model="LibraryStatusesModel" SelectedKeyChanged="ChangeLibraryStatusAsync" />
+			@if(Book.LibraryStatus != null)
+			{
+				<LitExplorer.Components.Pages.Browse.Filter.InputNumSave Model="InputNumSaveModel" OnSave="SaveChapterAsync" />	
+			}
+		}
 	</div>
 	<div class="col-12 col-md-10">
 		<a class="h5 fw-semibold d-inline book-title" href="@(SelectedBookSource.SiteUrl)" target="_blank">@Book.Title</a>
@@ -163,6 +173,15 @@
 	[Parameter]
 	public List<TagsCategoryDTO> TagsCategories { get; set; } = null!; // we assume that TagsCategories are not null and is not sorted
 
+	[Parameter]
+	public List<LibraryStatusDTO> LibraryStatuses { get; set; } = null!;
+
+	[Parameter]
+	public UserDTO? SessionUser { get; set; } = null;
+
+	[Parameter]
+	public EventCallback LibraryStatusChanged { get; set; }
+
 	private BookSourceDTO SelectedBookSource { get; set; } = null!;
 	private AuthorDTO SelectedAuthor { get; set; } = null!;
 	private SourceDTO SelectedSource { get; set; } = null!;
@@ -175,6 +194,9 @@
 	private const int visibleTagsNumber = 7;
 
 	private InputDropDownModel SourcesModel { get; set; } = null!;
+	private InputDropDownModel LibraryStatusesModel { get; set; } = null!;
+
+	private InputNumSaveModel InputNumSaveModel { get; set; } = null!;
 
 	protected override void OnInitialized()
 	{
@@ -184,6 +206,22 @@
 		var booksOriginalSources = Sources.Where(s => Book.BookSources.Any(bs => bs.SourceId == s.SourceId)).ToList();
 		foreach (var source in booksOriginalSources)
 			SourcesModel.Options.Add(source.SourceId, source.SourceName);
+
+		// wonky stuff
+		LibraryStatusesModel = new InputDropDownModel() { InitialValue = Book.LibraryStatus != null ? Book.LibraryStatus.StatusId : 7 };
+		foreach (var ls in LibraryStatuses)
+			LibraryStatusesModel.Options.Add(ls.StatusId, ls.StatusName);
+		LibraryStatusesModel.Options.Add(6, "Delete");
+		LibraryStatusesModel.Options.Add(7, "Add");
+		LibraryStatusesModel.Options.OrderBy(x => x.Key);
+
+		InputNumSaveModel = new InputNumSaveModel()
+		{
+			MinLimit = 0,
+			MaxLimit = SelectedBookSource.BookMeta.ChaptersCount.Value,
+			Value = SelectedBookSource.LastReadChapter.HasValue ? SelectedBookSource.LastReadChapter.Value : 0,
+			Name = ""
+		};
 
 		ToggleTags(false);
 	}
@@ -208,6 +246,19 @@
 
 	private void ChangeSelectedBookSource(int sourceId)
 		=> SelectedBookSource = Book.BookSources.Where(bs => bs.SourceId == sourceId).First();
+
+	private async Task ChangeLibraryStatusAsync(int libraryStatusId)
+	{
+		await LibraryService.UpdateLibraryStatusAsync(SessionUser!, Book.BookId, libraryStatusId == 6 ? null : libraryStatusId);
+
+		if(LibraryStatusChanged.HasDelegate)
+			await LibraryStatusChanged.InvokeAsync();
+	}
+
+	private async Task SaveChapterAsync()
+	{
+		await LibraryService.UpdateReadingHistoryAsync(SessionUser!, SelectedBookSource.BookSourceId, InputNumSaveModel.Value);
+	}
 
 	private string FormatNumber(int number)
 	{
