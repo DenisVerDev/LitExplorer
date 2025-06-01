@@ -21,11 +21,14 @@
 								Browse
 							</a>
 						</li>
-						<li class="nav-item ms-lg-5 me-5">
-							<a class="nav-link @(NavManager.ToBaseRelativePath(NavManager.Uri) == "Library" ? "active" : "")" href="/Library">
-								Library
-							</a>
-						</li>
+						@if (SessionUser != null)
+						{
+							<li class="nav-item ms-lg-5 me-5">
+								<a class="nav-link @(NavManager.ToBaseRelativePath(NavManager.Uri) == "Library" ? "active" : "")" href="/Library">
+									Library
+								</a>
+							</li>
+						}
 					</ul>
 				</div>
 			</div>

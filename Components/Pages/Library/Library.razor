@@ -40,7 +40,8 @@
 						TagsCategories="TagsCategories"
 						Sources="Sources" 
 						LibraryStatuses="LibraryStatuses"
-						SessionUser="SessionUser"/>
+						SessionUser="SessionUser"
+						LibraryStatusChanged="ApplyLibraryStatusOptionAsync"/>
 					}
 				}
 				else
@@ -88,7 +89,7 @@
 	{
 		int userId = SessionUser == null ? 0 : SessionUser.UserId;
 
-		var browseResponse = await LibraryService.InspectLibraryAsync(userId, LibraryStatusPanelModel.LO, 0, 12); // CHANGE
+		var browseResponse = await LibraryService.InspectLibraryAsync(userId, LibraryStatusPanelModel.LO, 0, 100); // CHANGE
 		Books = browseResponse?.Books;
 		Authors = browseResponse?.Authors;
 	}

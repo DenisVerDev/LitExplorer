@@ -1,0 +1,23 @@
+﻿<label class="fw-semibold mb-2">@Model.Name</label>
+<div class="d-flex align-items-center mt-2">
+    <input type="number" class="num-input"
+           placeholder="value"
+           min="@Model.MinLimit" max="@Model.MaxLimit"
+           @bind="Model.Value" />
+    <button class="litexp-btn litexp-btn-ps btn-fp"
+            @onclick="HandleSave">
+        Save
+    </button>
+</div>
+
+@code {
+    [Parameter] public InputNumSaveModel Model { get; set; } = null!;
+    [Parameter] public EventCallback<double> OnSave { get; set; }
+
+    private async Task HandleSave()
+    {
+        // Re-clamp value (getter uses setter logic) and invoke callback
+        Model.Value = Model.Value;
+        await OnSave.InvokeAsync(Model.Value);
+    }
+}

@@ -7,6 +7,10 @@
 		@if(SessionUser != null)
 		{
 			<LitExplorer.Components.Pages.Browse.Filter.InputDropDown Model="LibraryStatusesModel" SelectedKeyChanged="ChangeLibraryStatusAsync" />
+			@if(Book.LibraryStatus != null)
+			{
+				<LitExplorer.Components.Pages.Browse.Filter.InputNumSave Model="InputNumSaveModel" OnSave="SaveChapterAsync" />	
+			}
 		}
 	</div>
 	<div class="col-12 col-md-10">
@@ -175,6 +179,9 @@
 	[Parameter]
 	public UserDTO? SessionUser { get; set; } = null;
 
+	[Parameter]
+	public EventCallback LibraryStatusChanged { get; set; }
+
 	private BookSourceDTO SelectedBookSource { get; set; } = null!;
 	private AuthorDTO SelectedAuthor { get; set; } = null!;
 	private SourceDTO SelectedSource { get; set; } = null!;
@@ -188,6 +195,8 @@
 
 	private InputDropDownModel SourcesModel { get; set; } = null!;
 	private InputDropDownModel LibraryStatusesModel { get; set; } = null!;
+
+	private InputNumSaveModel InputNumSaveModel { get; set; } = null!;
 
 	protected override void OnInitialized()
 	{
@@ -205,6 +214,14 @@
 		LibraryStatusesModel.Options.Add(6, "Delete");
 		LibraryStatusesModel.Options.Add(7, "Add");
 		LibraryStatusesModel.Options.OrderBy(x => x.Key);
+
+		InputNumSaveModel = new InputNumSaveModel()
+		{
+			MinLimit = 0,
+			MaxLimit = SelectedBookSource.BookMeta.ChaptersCount.Value,
+			Value = SelectedBookSource.LastReadChapter.HasValue ? SelectedBookSource.LastReadChapter.Value : 0,
+			Name = ""
+		};
 
 		ToggleTags(false);
 	}
@@ -231,7 +248,17 @@
 		=> SelectedBookSource = Book.BookSources.Where(bs => bs.SourceId == sourceId).First();
 
 	private async Task ChangeLibraryStatusAsync(int libraryStatusId)
-		=> await LibraryService.UpdateLibraryStatusAsync(SessionUser!, Book.BookId, libraryStatusId == 6 ? null : libraryStatusId);
+	{
+		await LibraryService.UpdateLibraryStatusAsync(SessionUser!, Book.BookId, libraryStatusId == 6 ? null : libraryStatusId);
+
+		if(LibraryStatusChanged.HasDelegate)
+			await LibraryStatusChanged.InvokeAsync();
+	}
+
+	private async Task SaveChapterAsync()
+	{
+		await LibraryService.UpdateReadingHistoryAsync(SessionUser!, SelectedBookSource.BookSourceId, InputNumSaveModel.Value);
+	}
 
 	private string FormatNumber(int number)
 	{
