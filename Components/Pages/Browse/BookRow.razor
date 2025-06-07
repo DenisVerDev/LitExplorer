@@ -245,7 +245,14 @@
 	}
 
 	private void ChangeSelectedBookSource(int sourceId)
-		=> SelectedBookSource = Book.BookSources.Where(bs => bs.SourceId == sourceId).First();
+	{
+		SelectedBookSource = Book.BookSources.Where(bs => bs.SourceId == sourceId).First();
+		ToggleTags(false);
+
+		InputNumSaveModel.MaxLimit = SelectedBookSource.BookMeta.ChaptersCount.Value;
+		InputNumSaveModel.Value = SelectedBookSource.LastReadChapter.HasValue ? SelectedBookSource.LastReadChapter.Value : 0;
+		InputNumSaveModel.Name = "";
+	}
 
 	private async Task ChangeLibraryStatusAsync(int libraryStatusId)
 	{
@@ -257,6 +264,7 @@
 
 	private async Task SaveChapterAsync()
 	{
+		SelectedBookSource.LastReadChapter = InputNumSaveModel.Value;
 		await LibraryService.UpdateReadingHistoryAsync(SessionUser!, SelectedBookSource.BookSourceId, InputNumSaveModel.Value);
 	}
 
