@@ -74,7 +74,7 @@
 				}
 				else
 				{
-
+					<h1 class="mt-5 text-center">No books</h1>
 				}
 			</div>
 		</div>
@@ -94,23 +94,19 @@
 	private UserDTO? SessionUser { get; set; } = null;
 
 	protected override async Task OnInitializedAsync()
-		=> await InitializeDataAsync();
+	{
+		RecomTypePanelModel = new RecomTypePanelModel();
+		await LoadMetadataAsync();
+	}
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if(firstRender)
 		{
 			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
-			await InitializeDataAsync();
+			await LoadBooksAsync();
+			StateHasChanged();
 		}
-	}
-
-	private async Task InitializeDataAsync()
-	{
-		RecomTypePanelModel = new RecomTypePanelModel();
-
-		await LoadBooksAsync();
-		await LoadMetadataAsync();
 	}
 
 	private async Task LoadBooksAsync()

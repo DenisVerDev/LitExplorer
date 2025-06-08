@@ -72,12 +72,13 @@
 						TagsCategories="TagsCategories"
 						Sources="Sources" 
 						LibraryStatuses="LibraryStatuses"
-						SessionUser="SessionUser"/>
+						SessionUser="SessionUser"
+						LibraryStatusChanged="ApplyLibraryStatusOptionAsync"/>
 					}
 				}
 				else
 				{
-
+					<h1 class="mt-5 text-center">No books</h1>
 				}
 			</div>
 			<div class="row w-100 m-0 mt-3">
@@ -114,20 +115,6 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		await InitializeDataAsync();
-	}
-
-	protected override async Task OnAfterRenderAsync(bool firstRender)
-	{
-		if(firstRender)
-		{
-			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
-			await InitializeDataAsync();
-		}
-	}
-
-	private async Task InitializeDataAsync()
-	{
 		Filter = new BrowseFilterDTO()
 			{
 				Tags = new List<int>(),
@@ -136,9 +123,18 @@
 
 		PaginationModel = new PaginationModel() { PageSize = 12 };
 
-		await LoadBooksAsync();
-		await LoadPagesAsync();
 		await LoadMetadataAsync();
+	}
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if(firstRender)
+		{
+			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
+			await LoadBooksAsync();
+			await LoadPagesAsync();
+			StateHasChanged();
+		}
 	}
 
 	private async Task LoadBooksAsync()
@@ -183,5 +179,12 @@
 		Filter.SortByType = SortByType.DESC;
 
 		await OnApplyFilterAsync(true);
+	}
+
+	private async Task ApplyLibraryStatusOptionAsync()
+	{
+		Books?.Clear();
+		Authors?.Clear();
+		await LoadBooksAsync();
 	}
 }

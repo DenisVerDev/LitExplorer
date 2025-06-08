@@ -10,5 +10,7 @@
 
         // The currently selected key (can be read externally)
         public int SelectedKey { get; set; }
+
+        public string InitialText { get; set; } = string.Empty;
     }
 }

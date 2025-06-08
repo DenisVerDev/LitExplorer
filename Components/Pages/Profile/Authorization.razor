@@ -40,8 +40,12 @@
 					<button type="button" class="litexp-btn litexp-btn-ps w-100" @onclick="()=>IsNew=true">Sign up</button>
 				}
 			</div>
-			<Modal IsVisible="modalVisibility" Title="Sign in failure!" OnModalClosed="()=>modalVisibility = false">
-				<h6>Something went wrong</h6>
+			<Modal IsVisible="modalVisibility" Title="@(!IsNew ? "Sign in falure!" : "Sign up failure!")" OnModalClosed="()=>modalVisibility = false">
+				<h6>Your email or password is incorrect</h6>
+				@if(IsNew)
+				{
+					<h6>Check if your confirmation password was entered correctly</h6>
+				}
 			</Modal>
 		</div>
 	</div>

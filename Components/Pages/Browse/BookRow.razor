@@ -208,12 +208,19 @@
 			SourcesModel.Options.Add(source.SourceId, source.SourceName);
 
 		// wonky stuff
-		LibraryStatusesModel = new InputDropDownModel() { InitialValue = Book.LibraryStatus != null ? Book.LibraryStatus.StatusId : 7 };
+		LibraryStatusesModel = new InputDropDownModel() 
+		{ 
+			InitialValue = Book.LibraryStatus != null ? Book.LibraryStatus.StatusId : null,
+			InitialText = "Add"
+		};
+
 		foreach (var ls in LibraryStatuses)
 			LibraryStatusesModel.Options.Add(ls.StatusId, ls.StatusName);
-		LibraryStatusesModel.Options.Add(6, "Delete");
-		LibraryStatusesModel.Options.Add(7, "Add");
-		LibraryStatusesModel.Options.OrderBy(x => x.Key);
+
+		if (Book.LibraryStatus != null)
+			LibraryStatusesModel.Options.Add(6, "Delete");
+
+		// LibraryStatusesModel.Options = LibraryStatusesModel.Options.OrderBy(x => x.Key).ToDictionary<int,string>();
 
 		InputNumSaveModel = new InputNumSaveModel()
 		{

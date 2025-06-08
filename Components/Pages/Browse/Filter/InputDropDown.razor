@@ -1,6 +1,7 @@
 ﻿<div class="dropdown mt-2">
     <div class="dropdown-selected" @onclick="ToggleDropdown">
-        @Model.Options[Model.SelectedKey]
+        @(Model.InitialValue == null ? Model.InitialText : Model.Options[Model.SelectedKey])
+        @* @Model.Options[Model.SelectedKey] *@
         <span class="dropdown-arrow">&#9662;</span>
     </div>
     @if (showDropdown)
@@ -9,7 +10,7 @@
             @foreach (var kvp in Model.Options)
             {
                 <li class="dropdown-item @(Model.SelectedKey == kvp.Key ? "selected" : "")"
-                    @onclick="() => OnSelect(kvp.Key)">
+                @onclick="() => OnSelect(kvp.Key)">
                     @kvp.Value
                 </li>
             }
@@ -44,15 +45,14 @@
         base.OnParametersSet();
         if (!isInitialized && Model.Options != null && Model.Options.Count > 0)
         {
-            if (Model.InitialValue.HasValue && Model.Options.ContainsKey(Model.InitialValue.Value))
+            if (Model.InitialValue.HasValue)
             {
-                Model.SelectedKey = Model.InitialValue.Value;
+                if (Model.Options.ContainsKey(Model.InitialValue.Value))
+                    Model.SelectedKey = Model.InitialValue.Value;
+                else
+                    Model.SelectedKey = Model.Options.Keys.First();
             }
-            else
-            {
-                // No initial value specified or invalid, pick first key
-                Model.SelectedKey = Model.Options.Keys.First();
-            }
+
             isInitialized = true;
         }
     }

@@ -93,7 +93,7 @@
 	{
 		SessionUser = null;
 		await Storage.DeleteValueAsync(userKey);
-		NavManager.NavigateTo("Browse");
+		NavManager.NavigateTo("Browse", true);
 	}
 
 	private void HandleProfileFocus(FocusEventArgs args)
