@@ -76,6 +76,12 @@
 
 	private async Task AuthorizeAsync()
 	{
+		if(IsNew && password != confirmationPassword)
+		{
+			modalVisibility = true;
+			return;
+		}
+
 		SessionUser = IsNew ? await UserService.SignUpAsync(email, password) : await UserService.SignInAsync(email, password);
 		if (SessionUser != null)
 		{
