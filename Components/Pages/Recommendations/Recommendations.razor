@@ -29,7 +29,7 @@
 				</h5>
 				<div>
 					<div class="position-relative d-inline-block">
-						<button class="litexp-btn litexp-btn-ps btn-sortby" @onclick="ApplyRecommendationOptionAsync" title="Refresh recommendations">
+						<button class="litexp-btn litexp-btn-ps btn-sortby" @onclick="SortByRecommendationOptionAsync" title="Refresh recommendations">
 							<svg xmlns="http://www.w3.org/2000/svg"
 							viewBox="0 0 24 24"
 							aria-hidden="true"
@@ -54,7 +54,7 @@
 								<path d="M5.05 3C3.291 3 2.352 5.024 3.51 6.317l5.422 6.059v4.874c0 .472.227.917.613 1.2l3.069 2.25c1.01.742 2.454.036 2.454-1.2v-7.124l5.422-6.059C21.647 5.024 20.708 3 18.95 3H5.05Z" />
 							</svg>
 						</button>
-						<RecomTypePanel Model="RecomTypePanelModel" OnRecomTypeChange="ApplyRecommendationOptionAsync" />
+						<RecomTypePanel Model="RecomTypePanelModel" OnRecomTypeChange="SortByRecommendationOptionAsync" />
 					</div>
 				</div>
 			</div>
@@ -69,7 +69,7 @@
 						Sources="Sources" 
 						LibraryStatuses="LibraryStatuses"
 						SessionUser="SessionUser"
-						LibraryStatusChanged="ApplyRecommendationOptionAsync"/>
+						LibraryStatusChanged="ApplyLibraryStatusOptionAsync"/>
 					}
 				}
 				else
@@ -126,12 +126,32 @@
 		LibraryStatuses = await MetadataService.GetLibraryStatusesAsync();
 	}
 
-	private async Task ApplyRecommendationOptionAsync()
+	private async Task SortByRecommendationOptionAsync()
 	{
 		RecomTypePanelModel.Visibility = false;
 
 		Books?.Clear();
 		Authors?.Clear();
 		await LoadBooksAsync();
+	}
+
+	private async Task ApplyLibraryStatusOptionAsync(int bookId)
+	{
+		var browseResponse = await RecommendationService.RecommendBooksAsync(SessionUser, RecomTypePanelModel.RO, 12);
+		var bookResponse = browseResponse?.Books?.Where(b => b.BookId == bookId).FirstOrDefault();
+
+		if (bookResponse != null)
+		{
+			var websiteBook = Books!.Where(b => b.BookId == bookId).First();
+			if (bookResponse.LibraryStatus != null)
+			{
+				if (websiteBook.LibraryStatus == null)
+					websiteBook.LibraryStatus = new LibraryStatusDTO();
+
+				websiteBook.LibraryStatus!.StatusId = bookResponse.LibraryStatus!.StatusId;
+				websiteBook.LibraryStatus!.StatusName = bookResponse.LibraryStatus!.StatusName;
+			}
+			else websiteBook.LibraryStatus = null;
+		}
 	}
 }

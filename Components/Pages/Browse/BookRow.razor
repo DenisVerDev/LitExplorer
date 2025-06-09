@@ -180,7 +180,7 @@
 	public UserDTO? SessionUser { get; set; } = null;
 
 	[Parameter]
-	public EventCallback LibraryStatusChanged { get; set; }
+	public EventCallback<int> LibraryStatusChanged { get; set; }
 
 	private BookSourceDTO SelectedBookSource { get; set; } = null!;
 	private AuthorDTO SelectedAuthor { get; set; } = null!;
@@ -208,19 +208,8 @@
 			SourcesModel.Options.Add(source.SourceId, source.SourceName);
 
 		// wonky stuff
-		LibraryStatusesModel = new InputDropDownModel() 
-		{ 
-			InitialValue = Book.LibraryStatus != null ? Book.LibraryStatus.StatusId : null,
-			InitialText = "Add"
-		};
-
-		foreach (var ls in LibraryStatuses)
-			LibraryStatusesModel.Options.Add(ls.StatusId, ls.StatusName);
-
-		if (Book.LibraryStatus != null)
-			LibraryStatusesModel.Options.Add(6, "Delete");
-
-		// LibraryStatusesModel.Options = LibraryStatusesModel.Options.OrderBy(x => x.Key).ToDictionary<int,string>();
+		LibraryStatusesModel = new InputDropDownModel();
+		InitializeLibraryStatusModel();
 
 		InputNumSaveModel = new InputNumSaveModel()
 		{
@@ -233,8 +222,22 @@
 		ToggleTags(false);
 	}
 
+	private void InitializeLibraryStatusModel()
+	{
+		LibraryStatusesModel.Options.Clear(); // clearing in case it was already filled
+
+		LibraryStatusesModel.InitialValue = Book.LibraryStatus != null ? Book.LibraryStatus.StatusId : null;
+		LibraryStatusesModel.InitialText = "Add";
+
+		foreach (var ls in LibraryStatuses)
+			LibraryStatusesModel.Options.Add(ls.StatusId, ls.StatusName);
+
+		if (Book.LibraryStatus != null)
+			LibraryStatusesModel.Options.Add(6, "Delete");
+	}
+
 	private void ToggleDescription()
-		=> ShowFullDescription = !ShowFullDescription;
+	=> ShowFullDescription = !ShowFullDescription;
 
 	private void ToggleTags(bool? toggle = null)
 	{
@@ -266,7 +269,10 @@
 		await LibraryService.UpdateLibraryStatusAsync(SessionUser!, Book.BookId, libraryStatusId == 6 ? null : libraryStatusId);
 
 		if(LibraryStatusChanged.HasDelegate)
-			await LibraryStatusChanged.InvokeAsync();
+		{
+			await LibraryStatusChanged.InvokeAsync(Book.BookId);
+			InitializeLibraryStatusModel();
+		}
 	}
 
 	private async Task SaveChapterAsync()

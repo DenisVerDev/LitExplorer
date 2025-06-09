@@ -181,10 +181,23 @@
 		await OnApplyFilterAsync(true);
 	}
 
-	private async Task ApplyLibraryStatusOptionAsync()
+	private async Task ApplyLibraryStatusOptionAsync(int bookId)
 	{
-		Books?.Clear();
-		Authors?.Clear();
-		await LoadBooksAsync();
+		var browseResponse = await BrowseService.BrowseBooksAsync(Filter, PaginationModel.CurrentPage, PaginationModel.PageSize, SessionUser == null ? 0 : SessionUser.UserId);
+		var bookResponse = browseResponse?.Books?.Where(b=>b.BookId == bookId).FirstOrDefault();
+
+		if(bookResponse != null)
+		{
+			var websiteBook = Books!.Where(b => b.BookId == bookId).First();
+			if (bookResponse.LibraryStatus != null)
+			{
+				if (websiteBook.LibraryStatus == null)
+					websiteBook.LibraryStatus = new LibraryStatusDTO();
+
+				websiteBook.LibraryStatus!.StatusId = bookResponse.LibraryStatus!.StatusId;
+				websiteBook.LibraryStatus!.StatusName = bookResponse.LibraryStatus!.StatusName;
+			}
+			else websiteBook.LibraryStatus = null;
+		}
 	}
 }
