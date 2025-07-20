@@ -128,6 +128,12 @@ body{
     background-color: var(--primary-subtle-color);
 }
 
+/*-----No Books h1 class-----*/
+.no-books{
+  outline: none !important;
+  box-shadow: none !important;  /* in case a shadow is being used */
+}
+
 /*-----DARK THEME-----*/
 body.dark-theme {
     --container-bg-color: #2e2e2e;
