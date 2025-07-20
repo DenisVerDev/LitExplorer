@@ -1,0 +1,116 @@
+﻿@page "/Authorization"
+@layout LitExplorer.Components.Layout.BareLayout
+@inject UserService UserService
+@inject StorageService Storage
+@inject NavigationManager NavigationManager
+
+<PageTitle>@(IsNew ? "Sign up" : "Sign in")</PageTitle>
+
+<div class="container p-0 vh-100 d-flex align-items-center justify-content-center">
+	<div class="row w-100 m-0 justify-content-center">
+		<div class="col-12 col-md-3 p-4 centered-col shadow-sm rounded-2">
+			<div class="d-flex align-items-center position-relative mb-5">
+				<svg xmlns="http://www.w3.org/2000/svg"
+				class="btn-back position-absolute"
+				viewBox="0 0 24 24"
+				aria-hidden="true"
+				focusable="false"
+				width="1.5em"
+				height="1.5em"
+				fill="none"
+				@onclick="NavigateBack">
+					<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12l4-4m-4 4 4 4" />
+				</svg>
+				<h2 class="mx-auto">@(IsNew ? "Sign up" : "Sign in")</h2>
+			</div>
+			<div class="mb-4">
+				<input type="email" class="signin-input w-100 mb-3" placeholder="Enter your email" @bind="email" />
+				<input type="password" class="signin-input w-100 mb-3" placeholder="Enter your password" @bind="password" />
+				@if (IsNew)
+				{
+					<input type="password" class="signin-input w-100" placeholder="Confirm your password" @bind="confirmationPassword" />
+				}
+			</div>
+			<div>
+				<button type="button" class="litexp-btn litexp-btn-p w-100 mb-2" @onclick="AuthorizeAsync">
+					@(IsNew ? "Sign up" : "Sign in")
+				</button>
+				@if (!IsNew)
+				{
+					<button type="button" class="litexp-btn litexp-btn-ps w-100" @onclick="()=>IsNew=true">Sign up</button>
+				}
+			</div>
+			<Modal IsVisible="modalVisibility" Title="@(!IsNew ? "Sign in falure!" : "Sign up failure!")" OnModalClosed="()=>modalVisibility = false">
+				<h6>Your email or password is incorrect</h6>
+				@if(IsNew)
+				{
+					<h6>Check if your confirmation password was entered correctly</h6>
+				}
+			</Modal>
+		</div>
+	</div>
+</div>
+
+@code{
+	private const string userKey = "sessionUser";
+
+	private UserDTO? SessionUser { get; set; } = null;
+
+	private bool IsNew { get; set; } = false;
+
+	private string email = string.Empty;
+	private string password = string.Empty;
+	private string confirmationPassword = string.Empty;
+
+	private bool modalVisibility = false;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if(firstRender)
+		{
+			SessionUser = (await Storage.GetValueAsync<UserDTO>(userKey)) as UserDTO;
+			if(SessionUser != null)
+				NavigationManager.NavigateTo("Browse");
+		}
+	}
+
+	private async Task AuthorizeAsync()
+	{
+		if(EmailValidation())
+		{
+			if (IsNew && password != confirmationPassword)
+			{
+				modalVisibility = true;
+				return;
+			}
+
+			SessionUser = IsNew ? await UserService.SignUpAsync(email, password) : await UserService.SignInAsync(email, password);
+			if (SessionUser != null)
+			{
+				await Storage.SaveValueAsync(userKey, SessionUser);
+				NavigationManager.NavigateTo("Browse");
+			}
+			else modalVisibility = true;
+		}
+		else modalVisibility = true;
+	}
+
+	private bool EmailValidation()
+	{
+		try
+		{
+			MailAddress m = new MailAddress(email);
+			return true;
+		}
+		catch (FormatException)
+		{
+			return false;
+		}
+	}
+
+	private void NavigateBack()
+	{
+		if (IsNew) IsNew = false;
+		else NavigationManager.NavigateTo("Browse");
+	}
+}

@@ -1,0 +1,54 @@
+﻿<div class="w-100 d-flex align-items-center justify-content-center">
+	@for (int i = 0; i < Model.TotalPages; i += maxPagesPerBlock) // page block - max of 5 page-buttons
+	{
+		if(Model.CurrentPage >= i && Model.CurrentPage < i+maxPagesPerBlock)
+		{
+			int captureI = i;
+
+			var previousBlockAttrs = new Dictionary<string, object>();
+			var nextBlockAttrs = new Dictionary<string, object>();
+			if (captureI == 0)
+				previousBlockAttrs["disabled"] = "disabled";
+
+			if (captureI + maxPagesPerBlock >= Model.TotalPages)
+				nextBlockAttrs["disabled"] = "disabled";
+
+			<button class="litexp-btn litexp-btn-ps me-1" @onclick="async ()=> await ChangePageAsync(0)">
+				First
+			</button>
+			<button class="litexp-btn litexp-btn-ps me-1" @attributes="previousBlockAttrs" @onclick="async ()=> await ChangePageAsync(captureI-1)">
+				Previous
+			</button>
+			for (int j = i; j < i + maxPagesPerBlock && j < Model.TotalPages; j++) // inside page block
+			{
+				int captureJ = j;
+
+				<button class="litexp-btn @(Model.CurrentPage == j ? "litexp-btn-p" : "litexp-btn-ps") btn-page me-1" @onclick="async ()=> await ChangePageAsync(captureJ)">
+					@(j + 1)
+				</button>
+			}
+			<button class="litexp-btn litexp-btn-ps me-1" @attributes="nextBlockAttrs" @onclick="async ()=> await ChangePageAsync(captureI+maxPagesPerBlock)">
+				Next
+			</button>
+			<button class="litexp-btn litexp-btn-ps" @onclick="async ()=> await ChangePageAsync(Model.TotalPages-1)">
+				Last
+			</button>
+		}
+	}
+</div>
+
+@code{
+	[Parameter]
+	public PaginationModel Model { get; set; } = null!;
+
+	[Parameter]
+	public EventCallback<bool> OnPageChanged { get; set; }
+
+	private const int maxPagesPerBlock = 5;
+
+	private async Task ChangePageAsync(int page)
+	{
+		Model.CurrentPage = page;
+		await OnPageChanged.InvokeAsync(false); // no need to reset pagination
+	}
+}

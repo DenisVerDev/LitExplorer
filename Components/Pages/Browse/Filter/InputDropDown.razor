@@ -1,0 +1,59 @@
+﻿<div class="dropdown mt-2">
+    <div class="dropdown-selected" @onclick="ToggleDropdown">
+        @(Model.InitialValue == null ? Model.InitialText : Model.Options[Model.SelectedKey])
+        @* @Model.Options[Model.SelectedKey] *@
+        <span class="dropdown-arrow">&#9662;</span>
+    </div>
+    @if (showDropdown)
+    {
+        <ul class="dropdown-list">
+            @foreach (var kvp in Model.Options)
+            {
+                <li class="dropdown-item @(Model.SelectedKey == kvp.Key ? "selected" : "")"
+                @onclick="() => OnSelect(kvp.Key)">
+                    @kvp.Value
+                </li>
+            }
+        </ul>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public InputDropDownModel Model { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<int> SelectedKeyChanged { get; set; }
+
+    private bool showDropdown = false;
+    private bool isInitialized = false;
+
+    private void ToggleDropdown()
+    {
+        showDropdown = !showDropdown;
+    }
+
+    private async Task OnSelect(int key)
+    {
+        Model.SelectedKey = key;
+        showDropdown = false;
+        await SelectedKeyChanged.InvokeAsync(key);
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        if (!isInitialized && Model.Options != null && Model.Options.Count > 0)
+        {
+            if (Model.InitialValue.HasValue)
+            {
+                if (Model.Options.ContainsKey(Model.InitialValue.Value))
+                    Model.SelectedKey = Model.InitialValue.Value;
+                else
+                    Model.SelectedKey = Model.Options.Keys.First();
+            }
+
+            isInitialized = true;
+        }
+    }
+}

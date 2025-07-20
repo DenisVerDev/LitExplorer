@@ -2,9 +2,6 @@
 @inject StorageService Storage
 @inject IJSRuntime JS
 
-<header>
-	<NavMenu IsDarkTheme="isDarkTheme" OnToggleTheme="ToggleThemeAsync" />
-</header>
 <main>
 	@Body
 </main>
@@ -28,12 +25,5 @@
 	{
 		await JS.InvokeVoidAsync("toggleTheme", isDarkTheme);
 		StateHasChanged();
-	}
-
-	private async Task ToggleThemeAsync()
-	{
-		isDarkTheme = !isDarkTheme;
-		await Storage.SaveValueAsync(themeKey, isDarkTheme);
-		await ApplyThemeAsync();
 	}
 }

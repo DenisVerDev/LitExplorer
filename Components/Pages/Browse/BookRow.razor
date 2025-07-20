@@ -1,0 +1,293 @@
+﻿@inject LibraryService LibraryService
+
+<div class="row w-100 book-row p-3 d-flex align-items-start position-relative">
+	<div class="col-12 col-md-2 mb-2">
+		<img class="cover-img" src="@(SelectedBookSource.BookMeta.CoverImageUrl ?? "/images/default-cover.png")" alt="@Book.Title" />
+		<LitExplorer.Components.Pages.Browse.Filter.InputDropDown Model="SourcesModel" SelectedKeyChanged="ChangeSelectedBookSource"/>
+		@if(SessionUser != null)
+		{
+			<LitExplorer.Components.Pages.Browse.Filter.InputDropDown Model="LibraryStatusesModel" SelectedKeyChanged="ChangeLibraryStatusAsync" />
+			@if(Book.LibraryStatus != null)
+			{
+				<LitExplorer.Components.Pages.Browse.Filter.InputNumSave Model="InputNumSaveModel" OnSave="SaveChapterAsync" />	
+			}
+		}
+	</div>
+	<div class="col-12 col-md-10">
+		<a class="h5 fw-semibold d-inline book-title" href="@(SelectedBookSource.SiteUrl)" target="_blank">@Book.Title</a>
+		@foreach (var bookSource in Book.BookSources)
+		{
+			@if(SelectedBookSource.BookSourceId == bookSource.BookSourceId)
+			{
+				{
+					SelectedAuthor = Authors.Where(a => a.AuthorId == bookSource.BookMeta.AuthorId).First();
+					SelectedSource = Sources.Where(s => s.SourceId == bookSource.SourceId).First();
+				}
+				<h6 class="author">by @SelectedAuthor.AuthorName</h6>
+				<div class="meta small">
+					<span title="Average rating score">
+						<svg xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+						focusable="false"
+						width="1.2em"
+						height="1.2em"
+						fill="none">
+							<path transform="translate(0, -3)"
+							stroke="currentColor"
+							stroke-width="2"
+							d="M11.083 5.104c.35-.8 1.485-.8 1.834 0l1.752 4.022a1 1 0 0 0 .84.597l4.463.342c.9.069 1.255 1.2.556 1.771l-3.33 2.723a1 1 0 0 0-.337 1.016l1.03 4.119c.214.858-.71 1.552-1.474 1.106l-3.913-2.281a1 1 0 0 0-1.008 0L7.583 20.8c-.764.446-1.688-.248-1.474-1.106l1.03-4.119A1 1 0 0 0 6.8 14.56l-3.33-2.723c-.698-.571-.342-1.702.557-1.771l4.462-.342a1 1 0 0 0 .84-.597l1.753-4.022Z" />
+						</svg>
+						@bookSource.BookMeta.AverageRating
+					</span>
+					<span>(@FormatNumber(bookSource.BookMeta.RatingsCount!.Value) ratings)</span>
+					<span class="ms-lg-1" title="Number of views">
+						<svg xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+						focusable="false"
+						width="1.2em"
+						height="1.2em"
+						fill="none">
+							<path transform="translate(0, -2.5)"
+							stroke="currentColor"
+							stroke-width="2"
+							d="M21 12c0 1.2-4.03 6-9 6s-9-4.8-9-6c0-1.2 4.03-6 9-6s9 4.8 9 6Z" />
+							<path transform="translate(0, -2.5)"
+							stroke="currentColor"
+							stroke-width="2"
+							d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+						</svg>
+
+						@FormatNumber(bookSource.BookMeta.TotalViewsCount!.Value) views
+					</span>
+					<span class="ms-lg-1" title="Number of readers">
+						<svg xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+						focusable="false"
+						width="1.2em"
+						height="1.2em"
+						fill="none">
+							<path transform="translate(0, -2.5)"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0a8.949 8.949 0 0 0 4.951-1.488A3.987 3.987 0 0 0 13 16h-2a3.987 3.987 0 0 0-3.951 3.512A8.948 8.948 0 0 0 12 21Zm3-11a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+						</svg>
+						@FormatNumber(bookSource.BookMeta.ReadersCount!.Value) readers
+					</span>
+					<span class="ms-lg-1" title="Number of chapters">
+						<svg xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+						focusable="false"
+						width="1.2em"
+						height="1.2em"
+						fill="none">
+							<path transform="translate(0, -2)"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M11 9h6m-6 3h6m-6 3h6M6.996 9h.01m-.01 3h.01m-.01 3h.01M4 5h16a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z" />
+						</svg>
+						@FormatNumber(bookSource.BookMeta.ChaptersCount!.Value) chapters
+					</span>
+					<br class="d-sm-block d-md-none"/>
+					<span class="ms-lg-1" title="First chapter date">
+						<svg xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+						focusable="false"
+						width="1.2em"
+						height="1.2em"
+						fill="none">
+							<path transform="translate(0, -2.5)"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M4 10h16m-8-3V4M7 7V4m10 3V4M5 20h14a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1Zm3-7h.01v.01H8V13Zm4 0h.01v.01H12V13Zm4 0h.01v.01H16V13Zm-8 4h.01v.01H8V17Zm4 0h.01v.01H12V17Zm4 0h.01v.01H16V17Z" />
+						</svg>
+						@(bookSource.BookMeta.FirstChapterReleaseDate.HasValue ? bookSource.BookMeta.FirstChapterReleaseDate.Value.ToShortDateString() : "-")
+					</span>
+					<span class="ms-lg-1" title="Last chapter date">
+						<svg xmlns="http://www.w3.org/2000/svg"
+						viewBox="0 0 24 24"
+						aria-hidden="true"
+						focusable="false"
+						width="1.2em"
+						height="1.2em"
+						fill="none">
+							<path transform="translate(0, -2.5)"
+							stroke="currentColor"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							stroke-width="2"
+							d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+						</svg>
+						@(bookSource.BookMeta.LastChapterReleaseDate.HasValue ? bookSource.BookMeta.LastChapterReleaseDate.Value.ToShortDateString() : "-")
+					</span>
+				</div>
+				<div class="mt-2 d-flex flex-wrap">
+					@foreach(var tag in VisibleTags)
+					{
+						bool primary = (tag.CategoryId == 6 || tag.CategoryId == 7);
+						<span class="litexp-badge @(primary ? "litexp-badge-p" : "") me-1 mb-1">@tag.TagName</span>
+					}
+					@if (SelectedBookSource.Tags.Count() > 7)
+					{
+						<span class="litexp-badge litexp-badge-p litexp-badge-pi btn-tags-toggle me-1 mb-1" @onclick="()=>ToggleTags()">
+							@(ShowAllTags ? "-" : "+")
+						</span>
+					}
+				</div>
+				<div class="position-relative overflow-hidden">
+					@{
+						string descState = ShowFullDescription ? "book-description-full" : "book-description-clamped";
+					}
+					<div class="@descState mt-1">
+						@((MarkupString)bookSource.BookMeta.Description!)
+					</div>
+					<button class="read-more" @onclick="ToggleDescription">
+						@(ShowFullDescription ? "<<<less" : "more>>>")
+					</button>
+				</div>
+			}
+		}
+	</div>
+</div>
+
+@code{
+	[Parameter]
+	public BookDTO Book { get; set; } = null!; // we assume that all nested elements are filled and Book is not null
+
+	[Parameter]
+	public List<AuthorDTO> Authors { get; set; } = null!; // we assume that Authors are not null
+
+	[Parameter]
+	public List<SourceDTO> Sources { get; set; } = null!; // we assume that Sources are not null
+
+	[Parameter]
+	public List<TagsCategoryDTO> TagsCategories { get; set; } = null!; // we assume that TagsCategories are not null and is not sorted
+
+	[Parameter]
+	public List<LibraryStatusDTO> LibraryStatuses { get; set; } = null!;
+
+	[Parameter]
+	public UserDTO? SessionUser { get; set; } = null;
+
+	[Parameter]
+	public EventCallback<int> LibraryStatusChanged { get; set; }
+
+	private BookSourceDTO SelectedBookSource { get; set; } = null!;
+	private AuthorDTO SelectedAuthor { get; set; } = null!;
+	private SourceDTO SelectedSource { get; set; } = null!;
+
+	private List<TagDTO> VisibleTags { get; set; } = null!;
+
+	private bool ShowFullDescription { get; set; } = false;
+	private bool ShowAllTags { get; set; } = false;
+
+	private const int visibleTagsNumber = 7;
+
+	private InputDropDownModel SourcesModel { get; set; } = null!;
+	private InputDropDownModel LibraryStatusesModel { get; set; } = null!;
+
+	private InputNumSaveModel InputNumSaveModel { get; set; } = null!;
+
+	protected override void OnInitialized()
+	{
+		SelectedBookSource = Book.BookSources.First();
+
+		SourcesModel = new InputDropDownModel() { InitialValue = SelectedBookSource.SourceId };
+		var booksOriginalSources = Sources.Where(s => Book.BookSources.Any(bs => bs.SourceId == s.SourceId)).ToList();
+		foreach (var source in booksOriginalSources)
+			SourcesModel.Options.Add(source.SourceId, source.SourceName);
+
+		// wonky stuff
+		LibraryStatusesModel = new InputDropDownModel();
+		InitializeLibraryStatusModel();
+
+		InputNumSaveModel = new InputNumSaveModel()
+		{
+			MinLimit = 0,
+			MaxLimit = SelectedBookSource.BookMeta.ChaptersCount.Value,
+			Value = SelectedBookSource.LastReadChapter.HasValue ? SelectedBookSource.LastReadChapter.Value : 0,
+			Name = ""
+		};
+
+		ToggleTags(false);
+	}
+
+	private void InitializeLibraryStatusModel()
+	{
+		LibraryStatusesModel.Options.Clear(); // clearing in case it was already filled
+
+		LibraryStatusesModel.InitialValue = Book.LibraryStatus != null ? Book.LibraryStatus.StatusId : null;
+		LibraryStatusesModel.InitialText = "Add";
+
+		foreach (var ls in LibraryStatuses)
+			LibraryStatusesModel.Options.Add(ls.StatusId, ls.StatusName);
+
+		if (Book.LibraryStatus != null)
+			LibraryStatusesModel.Options.Add(6, "Delete");
+	}
+
+	private void ToggleDescription()
+	=> ShowFullDescription = !ShowFullDescription;
+
+	private void ToggleTags(bool? toggle = null)
+	{
+		if (toggle.HasValue)
+			ShowAllTags = toggle.Value;
+		else
+			ShowAllTags = !ShowAllTags;
+
+		var query = SelectedBookSource.Tags.OrderByDescending(t => t.CategoryId).AsQueryable();
+
+		if(ShowAllTags)
+			VisibleTags = query.ToList();
+		else
+			VisibleTags = query.Take(visibleTagsNumber).ToList();
+	}
+
+	private void ChangeSelectedBookSource(int sourceId)
+	{
+		SelectedBookSource = Book.BookSources.Where(bs => bs.SourceId == sourceId).First();
+		ToggleTags(false);
+
+		InputNumSaveModel.MaxLimit = SelectedBookSource.BookMeta.ChaptersCount.Value;
+		InputNumSaveModel.Value = SelectedBookSource.LastReadChapter.HasValue ? SelectedBookSource.LastReadChapter.Value : 0;
+		InputNumSaveModel.Name = "";
+	}
+
+	private async Task ChangeLibraryStatusAsync(int libraryStatusId)
+	{
+		await LibraryService.UpdateLibraryStatusAsync(SessionUser!, Book.BookId, libraryStatusId == 6 ? null : libraryStatusId);
+
+		if(LibraryStatusChanged.HasDelegate)
+		{
+			await LibraryStatusChanged.InvokeAsync(Book.BookId);
+			InitializeLibraryStatusModel();
+		}
+	}
+
+	private async Task SaveChapterAsync()
+	{
+		SelectedBookSource.LastReadChapter = InputNumSaveModel.Value;
+		await LibraryService.UpdateReadingHistoryAsync(SessionUser!, SelectedBookSource.BookSourceId, InputNumSaveModel.Value);
+	}
+
+	private string FormatNumber(int number)
+	{
+		if (number < 1000)
+			return number.ToString();
+		else if(number < 1000000)
+			return $"{number / 1000}k";
+		else
+			return $"{number / 1000000}m";
+	}
+}

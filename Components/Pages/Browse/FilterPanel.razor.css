@@ -1,0 +1,21 @@
+﻿.filter-panel{
+    background-color: var(--container-bg-color);
+}
+
+.tag-category {
+    display: block;
+    width: 100%;
+    font-weight: 600;
+    color: var(--text-color);
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+    cursor: pointer;
+}
+
+.tag-category:hover {
+    background-color: var(--border-color);
+    border-color: var(--border-color);
+}
+
+.btn-fp {
+    width: 48%;
+}

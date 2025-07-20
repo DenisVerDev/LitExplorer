@@ -1,0 +1,49 @@
+﻿@using System.Text.RegularExpressions;
+@inject IJSRuntime JS
+
+@if (Model.Visibility)
+{
+	<div class="recom-panel" id="recommendationPanel" tabindex="0" @onfocusout="()=>Model.Visibility = false">
+		@foreach (RecommendationsOptions option in Enum.GetValues(typeof(RecommendationsOptions)))
+		{
+			<div class="recommendation-item">
+				<!-- The radio input is hidden so we can style it with a custom label -->
+				<input type="radio"
+				id="@($"option_{option}")"
+				name="recommendOption"
+				class="litexp-radio"
+				checked="@(Model.RO == option)"
+				@onchange="async () =>{ Model.RO = option; await OnRecomTypeChange.InvokeAsync();}" />
+				<label for="@($"option_{option}")" class="litexp-radio-label">
+					<span class="radio-checkmark"></span>
+					@ToLabelCase(option.ToString())
+				</label>
+			</div>
+		}
+	</div>
+}
+
+@code {
+	[Parameter]
+	public EventCallback OnRecomTypeChange { get; set; }
+
+	[Parameter]
+	public RecomTypePanelModel Model { get; set; } = null!;
+
+	protected override async Task OnAfterRenderAsync(bool firstRender)
+	{
+		if (!Model.Visibility)
+			await JS.InvokeVoidAsync("focusElementRef", "recommendationPanel");
+	}
+
+	private string ToLabelCase(string input)
+	{
+		if (string.IsNullOrEmpty(input))
+			return input;
+
+		string spaced = Regex.Replace(input, "(?!^)([A-Z])", " $1");
+		spaced = spaced.ToLower();
+
+		return char.ToUpper(spaced[0]) + spaced.Substring(1);
+	}
+}

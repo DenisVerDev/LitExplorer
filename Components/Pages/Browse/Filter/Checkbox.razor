@@ -1,0 +1,10 @@
+﻿<input type="checkbox" class="litexp-checkbox" id="@String.Concat(Model.Group,"_",Model.Value)" @bind="Model.IsSelected"/>
+<label for="@String.Concat(Model.Group,"_",Model.Value)" class="litexp-checkbox-label">
+	<span class="checkmark"></span>
+	<span>@Model.Name</span>
+</label>
+
+@code{
+	[Parameter]
+	public CheckboxModel Model { get; set; } = null!;
+}
